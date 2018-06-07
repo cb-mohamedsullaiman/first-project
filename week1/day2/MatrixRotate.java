@@ -18,13 +18,13 @@ public class MatrixRotate{
 		int length=mat.length-1;
 		switch(choice){
 			case 0:
-				mat=matRotate.rotateLeft(mat,length);						//It will rotate left
+				mat=matRotate.rotateLeft(mat,length);						//Calling rotateleft function
 				break;
 			case 1:
-				mat=matRotate.rotateRight(mat,length);
+				mat=matRotate.rotateRight(mat,length);						//Calling rotateright function
 				break;
 			default:
-				System.out.println("Invalid choice");
+				System.out.println("Invalid choice");						//Just throwing error message if the choice is invalid
 			
 		}
 		matRotate.printArray(mat,num);
@@ -32,23 +32,23 @@ public class MatrixRotate{
 	int[][] rotateLeft(int mat[][],int length){
 		for(int i=0;i<=length;i++){
 			for(int j=i;j<length-i;j++){
-				int temp=mat[i][j];
-				mat[i][j]=mat[j][length-i];
-				mat[j][length-i]=mat[length-i][length-j];
-				mat[length-i][length-j]=mat[length-j][i];
-				mat[length-j][i]=temp;
+				int temp=mat[i][j];							//Storing top element in temp
+				mat[i][j]=mat[j][length-i];						//Rotating right to top
+				mat[j][length-i]=mat[length-i][length-j];				//Rotating bottom to right
+				mat[length-i][length-j]=mat[length-j][i];				//Rotating left to bottom
+				mat[length-j][i]=temp;							//Storing top element in left
 			}
 		}
 		return mat;
 	}
-	int[][] rotateRight(int mat[][],int length){						//It will rotate right
+	int[][] rotateRight(int mat[][],int length){					
 		for(int i=0;i<=length;i++){
 			for(int j=i;j<length-i;j++){
-				int temp=mat[i][j];
-				mat[i][j]=mat[length-j][i];
-				mat[length-j][i]=mat[length-i][length-j];
-				mat[length-i][length-j]=mat[j][length-i];
-				mat[j][length-i]=temp;
+				int temp=mat[i][j];							//Storing top element in temp
+				mat[i][j]=mat[length-j][i];						//Rotating left to top
+				mat[length-j][i]=mat[length-i][length-j];				//Rotating bottom to left
+				mat[length-i][length-j]=mat[j][length-i];				//Rotating right to bottom
+				mat[j][length-i]=temp;							//Storing top element in right 
 			}
 		}
 		return mat;
