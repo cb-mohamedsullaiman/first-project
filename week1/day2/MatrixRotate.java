@@ -1,3 +1,4 @@
+package userinput;
 import java.util.Scanner;
 public class MatrixRotate{
 	public static void main(String args[]){

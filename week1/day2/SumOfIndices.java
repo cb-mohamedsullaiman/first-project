@@ -1,9 +1,11 @@
+package userinput;
 import java.util.Scanner;
 
 public class SumOfIndices{
 	public static void main(String args[]){
 		int sum=0,i;
 		Scanner scanner=new Scanner(System.in);
+		System.out.println("Enter a string");
 		String str=scanner.next();			//Getting the string
 		for(i=0;i<str.length();i++){
 			sum=sum+(str.charAt(i)-'a'+1);		//Summing the indices of alphabets

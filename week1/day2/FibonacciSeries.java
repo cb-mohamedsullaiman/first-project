@@ -1,3 +1,4 @@
+package userinput;
 import java.util.Scanner;
 class FibonacciSeries{
 	public static void main(String args[]){
