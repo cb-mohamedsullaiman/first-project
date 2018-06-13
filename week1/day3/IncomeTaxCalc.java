@@ -1,152 +1,143 @@
 package classbasics;
 import java.util.ArrayList;
 import java.util.Scanner;
-class Employee{
-	private int empId;
-	String empName;
-	float basicSalary;
-	float totalSalary;
-	float tax;
-	char gender;
-	public Employee(){							//Constructor with zero arguments
-		empId=0;
-		empName=null;
-		basicSalary=0;
-		totalSalary=0;
-		gender='-';
-		tax=0;
-	}
-	public Employee(int empId,String empName,char gender,float basicSalary){		//Constructor for 4 arguments
-		this.empId=empId;
-		this.empName=empName;
-		this.gender=gender;
-		this.basicSalary=basicSalary;
-		this.totalSalary=0;
-		this.tax=0;
-	}
-	public void setEmployeeId(int empId){					//Method for setting employee id
-		this.empId=empId;
-	}
-	public void setEmployeeName(String empName){				//Method for setting employee name
-		this.empName=empName;
-	}
-	public void setEmployeeGender(char gender){				//Method for setting employee gender
-		this.gender=gender;
-	}
-	public void setBasicSalary(float basicSalary){				//Method for setting basic salary
-		this.basicSalary=basicSalary;
-	}
-	public void calculateTotalSalary(float dearnessAllowance,float houseRentAllowance,float deduction){		//Method for calculating total salary
-		this.totalSalary=this.basicSalary+(dearnessAllowance/100)*basicSalary+(houseRentAllowance/100)*basicSalary-(deduction/100)*basicSalary;
-	}
-	public void getEmployeeDetails(){					//Printing employee details
-		System.out.println("Employee id : "+empId);
-		System.out.println("Employee name : "+empName);
-		System.out.println("Employee gender :"+gender);
-		System.out.println("Employee salary : "+totalSalary);
-	}
-	public static void main(){						//This main is for Employee.class
-		Scanner scanner=new Scanner(System.in);
-		Employee emp= new Employee();
-		System.out.println("Enter employee id");
-		emp.setEmployeeId(scanner.nextInt());
-		scanner.nextLine();
-		System.out.println("Enter employee name");
-		emp.setEmployeeName(scanner.nextLine());
-		System.out.println("Enter the gender of the employee");
-		emp.setEmployeeGender(scanner.next().charAt(0));
-		System.out.println("Enter basic salary");
-		emp.setBasicSalary(scanner.nextFloat());
-		System.out.println("Enter Dearness allowance percentage");
-		float dearnessAllowance=scanner.nextFloat();
-		System.out.println("Enter House rent allowance percentage");
-		float houseAllowance=scanner.nextFloat();
-		System.out.println("Enter the deduction percentage");
-		float deduction=scanner.nextFloat();
-		emp.calculateTotalSalary(dearnessAllowance,houseAllowance,deduction);
-		
-	}
-}
-class IncomeTaxCalc{
-	public static ArrayList<Employee> getTaxableEmployee(ArrayList<Employee> emp){		//Method for getting taxable employees
-		ArrayList<Employee> emp1=new ArrayList<Employee>();
-		for(int i=0;i<emp.size();i++){
-			if(emp.get(i).totalSalary>=250000.0){
-				emp1.add(emp.get(i));
+
+public class IncomeTaxCalc{
+	public static ArrayList<Employee> getTaxableEmployee(ArrayList<Employee> employees){		//Method for getting taxable employees
+		ArrayList<Employee> taxableEmployees=new ArrayList<Employee>();
+		for(int i=0;i<employees.size();i++){
+			if(employees.get(i).getTotalSalary()>=250000.0){
+				taxableEmployees.add(employees.get(i));
 			}
 		}
-		return emp1;
+		return taxableEmployees;
 	}
-	public static void calculateTax(ArrayList<Employee> emp){
-		for(int i=0;i<emp.size();i++){
-			if(emp.get(i).totalSalary>=1000000){				//Calculating tax for employees with salary greater than 1000000
-				if(emp.get(i).gender=='M'){
-					emp.get(i).tax=(float)0.3*emp.get(i).totalSalary;
-				}
-				else if(emp.get(i).gender=='F'){
-					emp.get(i).tax=(float)0.28*emp.get(i).totalSalary;	
-				}
-				else{
-					System.out.println("Problem with gender");
-				}
+	public static ArrayList<Employee> getTaxableEmployeeByGender(ArrayList<Employee> employees,Character gender){
+		ArrayList<Employee> taxableEmployeesByGender=new ArrayList<Employee>();
+		for(int i=0;i<employees.size();i++){
+			if(employees.get(i).getTotalSalary()>=250000.0&&employees.get(i).getGender()==gender){
+				taxableEmployeesByGender.add(employees.get(i));
 			}
-			else if(emp.get(i).totalSalary>=500000){			//Calculating tax for employees with salary 1000000>salary>=500000
-				if(emp.get(i).gender=='M'){
-					emp.get(i).tax=(float)0.2*emp.get(i).totalSalary;
+		}
+		return taxableEmployeesByGender;
+	}
+	public static void calculateTax(Employee employee){
+		switch(employee.getGender()){
+			case 'M':
+				if(employee.getTotalSalary()>=1000000){				//Calculating tax for employees with salary greater than 1000000
+					employee.setTax((float)0.3*employee.getTotalSalary());
 				}
-				else if(emp.get(i).gender=='F'){
-					emp.get(i).tax=(float)0.18*emp.get(i).totalSalary;
+				else if(employee.getTotalSalary()>=500000){
+					employee.setTax((float)0.2*employee.getTotalSalary());
 				}
-				else{
-					System.out.println("Problem with gender");
+				else if(employee.getTotalSalary()>=250000){
+					employee.setTax((float)0.05*employee.getTotalSalary());
 				}
-			}
-			else if(emp.get(i).totalSalary>=250000){			//Calculating tax for employees with salary 500000>salary>=250000
-				if(emp.get(i).gender=='M'){
-					emp.get(i).tax=(float)0.05*emp.get(i).totalSalary;
+				break;
+			case 'F':
+				if(employee.getTotalSalary()>=1000000){				//Calculating tax for employees with salary greater than 1000000
+					employee.setTax((float)0.28*employee.getTotalSalary());
 				}
-				else if(emp.get(i).gender=='F'){
-					emp.get(i).tax=(float)0.045*emp.get(i).totalSalary;
+				else if(employee.getTotalSalary()>=500000){
+					employee.setTax((float)0.18*employee.getTotalSalary());
 				}
-				else{
-					System.out.println("Problem with gender");
+				else if(employee.getTotalSalary()>=250000){
+					employee.setTax((float)0.045*employee.getTotalSalary());
 				}
-			}
+				break;
+			default:
+				System.out.println("Problem with gender");
+			
 		}
 	}
 	public static void main(String args[]){
 		Scanner scanner=new Scanner(System.in);
-		boolean choice;
-		ArrayList<Employee> employees=new ArrayList<Employee>();			//Creating a list of employees
+		ArrayList<Employee> employees=new ArrayList<Employee>();		//Creating a list of employees
+		System.out.println("1.Add employee\n2.Print Taxable employees\n3.Print Taxable Male Employees\n4.Print Taxable Female Employees\n5.Print all employees\n6.Exit");
+		Integer choice=scanner.nextInt();
 		do{
-			System.out.println("Enter the employee id");
-			int empId=scanner.nextInt();
-			scanner.nextLine();
-			System.out.println("Enter the name of the employee");			
-			String empName=scanner.nextLine();					//Getting name of employee
-			System.out.println("Enter the gender of the employee");			
-			char gender=scanner.nextLine().charAt(0);				//Getting gender
-			System.out.println("Enter the basic pay of employee");			
-			float basicSalary=scanner.nextFloat();					//Getting basic salary
-			Employee emp=new Employee(empId,empName,gender,basicSalary);		//Creating an employee
-			System.out.println("Enter the dearness allowance percentage");
-			float dearnessAllowance=scanner.nextFloat();				//Getting dearness allowance percentage
-			System.out.println("Enter the house rent allowance percentage");
-			float houseAllowance=scanner.nextFloat();				//Getting house allowance percentage
-			System.out.println("Enter the deduction percentage");
-			float deduction=scanner.nextFloat();					//Getting deduction percentage
-			emp.calculateTotalSalary(dearnessAllowance,houseAllowance,deduction);			//Calculating total salary
-			employees.add(emp);									//Adding employee to the employee list
-			System.out.println("Do you want to add more employees? If yes type true and if not type false");
-			choice=scanner.nextBoolean();						//Getting choice
-		}while(choice==true);
-		calculateTax(employees);							//Calculating tax for employees
-		ArrayList<Employee> taxableEmployees=new ArrayList<Employee>();			//Creating taxable employees list
-		taxableEmployees=getTaxableEmployee(employees);					//Getting taxable employees list
-		for(int i=0;i<taxableEmployees.size();i++){
-			System.out.println("["+taxableEmployees.get(i).empName+"] | ["+taxableEmployees.get(i).gender+"] | ["+taxableEmployees.get(i).totalSalary+"] | ["+taxableEmployees.get(i).tax+"]");
-			//Printing details of taxable employees
-		}
+			switch(choice){
+				case 1:
+					System.out.println("Enter the employee id");
+					Integer empId=scanner.nextInt();
+					scanner.nextLine();
+					System.out.println("Enter the name of the employee");			
+					String empName=scanner.nextLine();					//Getting name of employee
+					Character gender;
+					do{
+						System.out.println("Enter the gender of the employee(M for Male and F for female\n****No other characters are allowed***");			
+						gender=scanner.nextLine().charAt(0);				//Getting gender
+					}while(!(gender.equals('M')||gender.equals('F')));
+					System.out.println("Enter the basic pay of employee");			
+					Float basicSalary=scanner.nextFloat();					//Getting basic salary
+					Employee employee=new Employee(empId,empName,gender,basicSalary);		//Creating an employee
+					System.out.println("Enter the dearness allowance percentage");
+					Float dearnessAllowance=scanner.nextFloat();				//Getting dearness allowance percentage
+					System.out.println("Enter the house rent allowance percentage");
+					Float houseAllowance=scanner.nextFloat();				//Getting house allowance percentage
+					System.out.println("Enter the deduction percentage");
+					Float deduction=scanner.nextFloat();					//Getting deduction percentage
+					employee.calculateTotalSalary(dearnessAllowance,houseAllowance,deduction);			//Calculating total salary
+					calculateTax(employee);
+					employees.add(employee);	
+					break;								//Adding employee to the employee list
+				case 2:		
+					ArrayList<Employee> taxableEmployees=new ArrayList<Employee>();			//Creating taxable employees list
+					taxableEmployees=getTaxableEmployee(employees);					//Getting taxable employees list
+					if(taxableEmployees.size()>0){
+						for(int i=0;i<taxableEmployees.size();i++){
+							System.out.println("["+taxableEmployees.get(i).getEmployeeName()+"] | ["+taxableEmployees.get(i).getGender()+"] | ["+taxableEmployees.get(i).getTotalSalary()+"] | ["+taxableEmployees.get(i).getTax()+"]");
+							//Printting details of taxable employees
+						}
+					}
+					else{
+						System.out.println("\n*****No taxable employees found*****");
+					}
+					break;
+				case 3:
+					ArrayList<Employee> taxableMaleEmployees=new ArrayList<Employee>();
+					taxableMaleEmployees=getTaxableEmployeeByGender(employees,'M');
+					if(taxableMaleEmployees.size()>0){
+						for(int i=0;i<taxableMaleEmployees.size();i++){
+							System.out.println("["+taxableMaleEmployees.get(i).getEmployeeName()+"] | ["+taxableMaleEmployees.get(i).getGender()+"] | ["+taxableMaleEmployees.get(i).getTotalSalary()+"] | ["+taxableMaleEmployees.get(i).getTax()+"]");
+							//Printing details of taxable Male employees
+						}
+					}
+					else{
+						System.out.println("\n*****No taxable Male employees found*****");
+					}
+					break;
+				case 4:
+					ArrayList<Employee> taxableFemaleEmployees=new ArrayList<Employee>();
+					taxableFemaleEmployees=getTaxableEmployeeByGender(employees,'F');
+					if(taxableFemaleEmployees.size()>0){
+						for(int i=0;i<taxableFemaleEmployees.size();i++){
+							System.out.println("["+taxableFemaleEmployees.get(i).getEmployeeName()+"] | ["+taxableFemaleEmployees.get(i).getGender()+"] | ["+taxableFemaleEmployees.get(i).getTotalSalary()+"] | ["+taxableFemaleEmployees.get(i).getTax()+"]");
+							//Printing details of taxable Male employees
+						}
+					}
+					else{
+						System.out.println("\n*****No taxable Female employees found*****");
+					}
+					break;
+				case 5:
+					if(employees.size()>0){
+						for(int i=0;i<employees.size();i++){
+							System.out.println("["+employees.get(i).getEmployeeName()+"] | ["+employees.get(i).getGender()+"] | ["+employees.get(i).getTotalSalary()+"] | ["+employees.get(i).getTax()+"]");
+							//Printing details of taxable Male employees
+						}
+					}
+					else{
+						System.out.println("\n*****No employees found*****");
+					}
+					break;
+				case 6:
+					break;
+			}
+		System.out.println("1.Add employee\n2.Print Taxable employees\n3.Print Taxable Male Employees\n4.Print Taxable Female Employees\n5.Print all employees\n6.Exit");
+		choice=scanner.nextInt();
+		scanner.nextLine();
+		}while(choice!=6);
 	}
 }
 		
