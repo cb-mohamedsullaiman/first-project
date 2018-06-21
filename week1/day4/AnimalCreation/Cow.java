@@ -2,11 +2,8 @@ package oopsjava;
 
 public class Cow extends oopsjava.Mammal{
 	public Cow(){
-		super();
-		this.setIsHerbivore(true);
-	}
-	public void getMovement(){
-		System.out.println("It can walk");
+		this.setHerbivorous(true);
+		this.setRunnable(false);
 	}
 	public void printAdditionalInfo(){
 		super.printAdditionalInfo();

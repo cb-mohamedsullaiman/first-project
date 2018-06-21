@@ -2,11 +2,10 @@ package oopsjava;
 
 public class Bat extends oopsjava.Mammal{
 	public Bat(){
-		super();
-		this.setCanFly(true);
-	}
-	public void getMovement(){
-		System.out.println("It can fly");
+		this.setFlyable(true);
+		this.setHerbivorous(true);
+		this.setRunnable(false);
+		this.setWalkable(false);
 	}
 	public void printAdditionalInfo(){
 		super.printAdditionalInfo();

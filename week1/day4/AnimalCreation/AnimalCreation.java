@@ -11,7 +11,7 @@ public class AnimalCreation{
 			ArrayList<oopsjava.Animal> animalFly=new ArrayList<oopsjava.Animal>();
 			for(int i=0;i<animals.size();i++){
 				oopsjava.Animal animal=animals.get(i);
-				if(animal.getCanFly()){
+				if(animal.isFlyable()){
 					animalFly.add(animal);
 				}
 			}
@@ -28,7 +28,7 @@ public class AnimalCreation{
 			ArrayList<oopsjava.Animal> animalHerbivore=new ArrayList<oopsjava.Animal>();
 			for(int i=0;i<animals.size();i++){
 				Animal animal=animals.get(i);
-				if(animal.getIsHerbivore()){
+				if(animal.isHerbivorous()){
 					animalHerbivore.add(animal);
 				}
 			}
@@ -54,7 +54,6 @@ public class AnimalCreation{
 				System.out.println("Animal type\t"+animal.getType());
 				System.out.println("Description: ");
 				animal.getMovement();
-				animal.hasHair();
 				animal.printAdditionalInfo();
 				System.out.println("\n");
 			}

@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 public class Bus extends Vehicle{
 	public Bus(){
-		super();
 		this.setType("Bus");
 	}
 	public Bus(String brand,String color,ArrayList<Service> service){

@@ -5,14 +5,14 @@ public class Vehicle{
 	private String brand;
 	private String color;
 	private String type;
-	ArrayList<Service> service;
+	ArrayList<Service> services;
 	public Vehicle(){
-		this.service=new ArrayList<Service>();
+		this.services=new ArrayList<Service>();
 	}
 	public Vehicle(String brand,String color,ArrayList<Service> service){
 		this.brand=brand;
 		this.color=color;
-		this.service=service;
+		this.services=services;
 	}
 	public void setBrand(String brand){
 		this.brand=brand;
@@ -24,7 +24,7 @@ public class Vehicle{
 		this.type=type;
 	}
 	public void addService(Service service){
-		this.service.add(service);
+		services.add(service);
 	}
 	public String getBrand(){
 		return brand;
@@ -36,14 +36,14 @@ public class Vehicle{
 		return type;
 	}
 	public ArrayList<Service> getServices(){
-		return service;
+		return services;
 	}
 	public void printDetails(){
 		System.out.println("Brand \t\t\t: "+brand);
 		System.out.println("Color \t\t\t: "+color);
 		System.out.println("Service details:");
-		for(int i=0;i<service.size();i++){
-			service.get(i).printServiceDetails();
+		for(int i=0;i<services.size();i++){
+			services.get(i).printServiceDetails();
 		}
 	}
 }

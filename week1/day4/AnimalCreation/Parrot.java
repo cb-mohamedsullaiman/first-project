@@ -2,12 +2,8 @@ package oopsjava;
 
 public class Parrot extends oopsjava.Bird{
 	public Parrot(){
-		super();
-		this.setCanFly(true);
-		this.setIsHerbivore(true);
-	}
-	public void getMovement(){
-		System.out.println("It will fly");
+		this.setFlyable(true);
+		this.setHerbivorous(true);
 	}
 	public void printAdditionalInfo(){
 		super.printAdditionalInfo();

@@ -6,7 +6,6 @@ public class Invoice{
 	private Float amountTotal;
 	private String employeeAssigned;
 	public Invoice(){
-		amountTotal=(float)0.0;
 	}
 	public Invoice(String customerName,Vehicle vehicle,float amountTotal,String employeeAssigned){
 		this.customerName=customerName;
@@ -20,12 +19,12 @@ public class Invoice{
 	public void setVehicle(Vehicle vehicle){
 		this.vehicle=vehicle;
 	}
-	public void calculateTotalAmount(){
-		for(int i=0;i<vehicle.service.size();i++){
-			amountTotal=amountTotal+vehicle.service.get(i).getServiceCharge();
+	public void calculateTotalCharge(){								//Calculating the total service charge
+		for(int i=0;i<vehicle.getServices().size();i++){
+			amountTotal=amountTotal+vehicle.getServices().get(i).getServiceCharge();
 		}
 	}
-	public void setEmployeeAssigned(String employeeAssigned){
+	public void assignEmployee(String employeeAssigned){
 		this.employeeAssigned=employeeAssigned;
 	}
 	public String getCustomerName(){
@@ -37,7 +36,7 @@ public class Invoice{
 	public Float getTotalAmount(){
 		return amountTotal;
 	}
-	public String getEmployeeAssigned(){
+	public String getAssignedEmployee(){
 		return employeeAssigned;
 	}
 	public void printInvoiceDetails(){

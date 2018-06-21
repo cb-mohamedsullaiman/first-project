@@ -1,6 +1,8 @@
 package oopsjava;
 
 public class Dog extends oopsjava.Mammal{
+	// Why do I need to do this? isn't Parent class constructor get's called automatically?
+	// Read and let me know
 	public Dog(){
 		super();
 	}
