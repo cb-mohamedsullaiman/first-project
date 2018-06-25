@@ -1,4 +1,4 @@
-package javabasics;
+package week1.day1;
 import java.util.Scanner;
 class SmallestPow{
 	public static void main(String args[]){

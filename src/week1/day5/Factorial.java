@@ -1,4 +1,4 @@
-package nestedbasics;
+package week1.day5;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -9,9 +9,11 @@ public class Factorial implements Iterable{
 		this.lowerLimit=lowerLimit;
 		this.upperLimit=upperLimit;
 	}
+        @Override
 	public Iterator iterator() {
 		Iterator iterator= new Iterator(){
 			private int index=lowerLimit;
+                        @Override
 			public boolean hasNext(){
 				if(index<=upperLimit){
 					return true;
@@ -20,12 +22,14 @@ public class Factorial implements Iterable{
 					return false;
 				}
 			}
+                        @Override
 			public Object next(){
 				return index++;
 			}
 		}; 
 		return iterator;
 	}
+        @Override
 	public String toString(){
 		Iterator iterator=this.iterator();
 		StringBuilder factorialString=new StringBuilder();

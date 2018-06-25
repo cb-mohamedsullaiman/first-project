@@ -1,4 +1,4 @@
-package filesjava;
+package week2.day3_4;
 import java.nio.file.Path;
 import java.io.File;
 import java.nio.file.Files;

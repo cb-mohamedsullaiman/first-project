@@ -1,4 +1,4 @@
-package filesjava;
+package week2.day3_4;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.io.IOException;
@@ -11,10 +11,6 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import java.util.Iterator;
-import java.io.File;
-import java.util.List;
-import org.apache.commons.io.FileUtils;
-import java.util.Comparator;
 
 public class CSVLineDuplicationRemoval{
 	public static void readCSV(Set<String> set,String sourcePathString){
@@ -47,7 +43,7 @@ public class CSVLineDuplicationRemoval{
 		}
 	}
 	public static void main(String args[]){
-		Set<String> set = new LinkedHashSet<String>();
+		Set<String> set = new LinkedHashSet<>();
 		String sourceFilePath = "/Users/cb-mohamedsullaiman/sample/personal_details.csv";
 		readCSV(set,sourceFilePath);
 		String destinationFilePath = "/Users/cb-mohamedsullaiman/sample/personal_details_output.csv";

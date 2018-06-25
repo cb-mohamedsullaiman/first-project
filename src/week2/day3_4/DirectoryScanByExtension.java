@@ -1,4 +1,4 @@
-package filesjava;
+package week2.day3_4;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +41,7 @@ public class DirectoryScanByExtension{
 		Scanner scanner=new Scanner(System.in);
 		System.out.println("Enter the directory you want to explore");
 		String directory=scanner.nextLine();
-		Map<String,Integer> map=new HashMap<String,Integer>();
+		Map<String,Integer> map=new HashMap<>();
 		Path path=Paths.get("/Users/cb-mohamedsullaiman/"+directory+"/");
 		getExtension(map,path);
 		map.forEach((k,v)->System.out.println(k+"\t\t"+v));

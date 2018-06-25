@@ -1,4 +1,4 @@
-package javabasics;
+package week1.day1;
 class HelloWorld{
 	public static void main(String args[]){
 		System.out.println("Hello world"); //Printing the string within the quotes

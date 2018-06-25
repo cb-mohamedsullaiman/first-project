@@ -1,21 +1,17 @@
-package filesjava;
+package week2.day3_4;
 
 import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.io.IOException;
 import java.io.File;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.apache.commons.io.*;
 
-public class MapWordsWithOccurence extends filesjava.FileManipulation {
+public class MapWordsWithOccurence extends FileManipulation {
+        @Override
 	public void readFromFile(Map<String,String> map,File file){
 		Path sourcePath = file.toPath();
 		try(Scanner scanner = new Scanner(Files.newBufferedReader(sourcePath));) {
@@ -29,7 +25,6 @@ public class MapWordsWithOccurence extends filesjava.FileManipulation {
 			System.out.println("IO exception while reading");
 		}
 	}
-	//@Override
 	public static void addToMap(Map<String,String> map,String word){
 		Integer numberOfOccurances=0;
 		if(map.containsKey(word)){
@@ -46,7 +41,7 @@ public class MapWordsWithOccurence extends filesjava.FileManipulation {
 	}
 	public static void main(String args[]){
 		FileManipulation fileManipulation = new MapWordsWithOccurence();
-		Map<String,String> map=new TreeMap<String,String>();
+		Map<String,String> map=new TreeMap<>();
 		File sourceFile = FileUtils.getFile("/Users/cb-mohamedsullaiman/sample/iostreams.txt");
 		fileManipulation.readFromFile(map,sourceFile);
 		File destinationFile = FileUtils.getFile("/Users/cb-mohamedsullaiman/sample/iostreams_output.txt");

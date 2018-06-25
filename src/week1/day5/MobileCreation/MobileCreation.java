@@ -1,10 +1,10 @@
-package nestedbasics;
+package week1.day5.MobileCreation;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MobileCreation{
 	public static void main(String args[]){
-		ArrayList<Mobile> mobiles=new ArrayList<Mobile>();
+		ArrayList<Mobile> mobiles=new ArrayList<>();
 		Scanner scanner=new Scanner(System.in);
 		System.out.println("1.Create a mobile\n2.Print all the mobiles and remaining charge\n3.Exit");
 		Integer choice=scanner.nextInt();

@@ -1,4 +1,4 @@
-package userinput;
+package week1.day2;
 import java.util.Scanner;
 class ArrayMaxMin{
 	public static void main(String args[]){

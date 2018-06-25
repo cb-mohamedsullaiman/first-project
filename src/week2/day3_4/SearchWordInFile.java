@@ -1,4 +1,4 @@
-package filesjava;
+package week2.day3_4;
 
 import java.util.Scanner;
 import java.io.File;
@@ -7,12 +7,8 @@ import org.apache.commons.io.LineIterator;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
-import java.io.BufferedWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Iterator;
 
-public class SearchWordInFile extends filesjava.FileManipulation{
+public class SearchWordInFile extends FileManipulation{
 	private String wordToBeSearched;
 	public void addToMap(Map<String,String> map,String line,String lineNumber){
 		if(line.contains(wordToBeSearched)){
@@ -21,12 +17,13 @@ public class SearchWordInFile extends filesjava.FileManipulation{
 			while(index>=0){
 				index = line.indexOf(wordToBeSearched,index+wordToBeSearched.length());
 				if(index!=-1){
-					listOfIndices.append(","+index);
+					listOfIndices.append(",").append(index);
 				}
 			}
 			map.put(lineNumber,listOfIndices.toString());
 		}
 	}
+        @Override
 	public void readFromFile(Map<String,String> map,File file){
 		try(LineIterator lineIterator = FileUtils.lineIterator(file);){
 			Integer lineNumber = 1;
@@ -46,7 +43,7 @@ public class SearchWordInFile extends filesjava.FileManipulation{
 		Scanner scanner = new Scanner(System.in);
 		searchWordInFile.wordToBeSearched = scanner.next();
 		File sourceFile = FileUtils.getFile("/Users/cb-mohamedsullaiman/sample/iostreams.txt");
-		Map<String,String> map = new TreeMap<String,String>();
+		Map<String,String> map = new TreeMap<>();
 		searchWordInFile.readFromFile(map,sourceFile);
 		File targetFile = FileUtils.getFile("/Users/cb-mohamedsullaiman/sample/search_output.txt");
 		searchWordInFile.writeToFile(map,targetFile);

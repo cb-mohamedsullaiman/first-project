@@ -1,4 +1,4 @@
-package nestedbasics;
+package week1.day5.MobileCreation;
 
 public class Mobile{
 	private String name;

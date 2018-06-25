@@ -1,4 +1,4 @@
-package nestedbasics;
+package week1.day5;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,7 +22,7 @@ public class Employee{
 		}
 	}
 	public static void main(String args[]){
-		ArrayList<Employee> employees=new ArrayList<Employee>();
+		ArrayList<Employee> employees=new ArrayList<>();
 		Scanner scanner=new Scanner(System.in);
 		System.out.println("1.Add an employee\n2.Sort employees by Name\n3.Sort employees by Salary\n4.Sort employees by Age\n5.Exit");
 		Integer choice=scanner.nextInt();
@@ -44,6 +44,7 @@ public class Employee{
 						ArrayList<Employee> employeeByName=(ArrayList<Employee>)employees.clone();
 						Collections.copy(employeeByName,employees);
 						Collections.sort(employeeByName,new Comparator<Employee>(){
+                                                        @Override
 							public int compare(Employee employee1,Employee employee2){
 								return employee1.name.compareTo(employee2.name);
 							}
@@ -58,6 +59,7 @@ public class Employee{
 					if(employees.size()>0){
 						ArrayList<Employee> employeeBySalary= (ArrayList<Employee>)employees.clone();
 						Collections.sort(employeeBySalary,new Comparator<Employee>(){
+                                                        @Override
 							public int compare(Employee employee1,Employee employee2){
 								return (int)(employee1.salary-employee2.salary);
 							}
@@ -73,6 +75,7 @@ public class Employee{
 						ArrayList<Employee> employeeByAge=(ArrayList<Employee>)employees.clone();
 						Collections.copy(employeeByAge,employees);
 						Collections.sort(employeeByAge,new Comparator<Employee>(){
+                                                        @Override
 							public int compare(Employee employee1,Employee employee2){
 								return employee1.age-employee2.age;
 							}
