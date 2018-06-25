@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 public class PhoneDirectory{
 	public static void main(String args[]){
-		PhoneDirectory phoneDirectory=new PhoneDirectory();
 		Scanner scanner=new Scanner(System.in);
 		Integer choice;
 		Map<String,ArrayList<Person>> map=new TreeMap<String,ArrayList<Person>>();
