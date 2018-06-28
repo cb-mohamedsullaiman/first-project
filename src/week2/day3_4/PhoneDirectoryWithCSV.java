@@ -27,7 +27,7 @@ import org.apache.commons.csv.CSVFormat;
  *
  * @author cb-mohamedsullaiman
  */
-public class PhoneDirectory {
+public class PhoneDirectoryWithCSV {
     public static void readFromCSV(Map<String,ArrayList<Person>> map, Path sourcePath){
         
 		try(BufferedReader bufferedReader = Files.newBufferedReader(sourcePath); CSVParser csvParser = CSVParser.parse(bufferedReader,CSVFormat.DEFAULT.withHeader().withSkipHeaderRecord().withIgnoreHeaderCase().withTrim());){
@@ -67,7 +67,6 @@ public class PhoneDirectory {
                                 persons.add(person);
                                 map.put(name,persons);
 			}
-//                        Iterator<Map.Entry> iterator = 
 		}
                 catch(IOException ioException){
                     System.out.println("IO exception while reading file");
