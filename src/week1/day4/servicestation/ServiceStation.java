@@ -15,15 +15,6 @@ public class ServiceStation{
 		vehicles=new ArrayList<>();
 		invoices=new ArrayList<>();
 	}
-	public ServiceStation(String stationName,String stationAddress,Long stationContact,ArrayList<Customer> customers,ArrayList<Employee> employees,ArrayList<Vehicle> vehicles,ArrayList<Invoice> invoices){
-		this.stationName=stationName;
-		this.stationAddress=stationAddress;
-		this.stationContact=stationContact;
-		this.customers=customers;
-		this.employees=employees;
-		this.vehicles=vehicles;
-		this.invoices=invoices;
-	}
 	public void setStationName(String stationName){
 		this.stationName=stationName;
 	}

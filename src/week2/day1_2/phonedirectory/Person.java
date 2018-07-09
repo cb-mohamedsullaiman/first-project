@@ -1,41 +1,31 @@
 package week2.day1_2.phonedirectory;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 public class Person{
-	private Name name;
+	private String name;
 	private String address;
-	private HashSet<PhoneNumberDetails> numberDetails;
-	public Person(){
-		numberDetails=new HashSet<>();
-        }
-	public void setName(Name name){
+	private List<PhoneNumberDetails> numberDetails = new ArrayList<>();
+	
+	public void setName(String name){
 		this.name=name;
 	}
 	public void setAddress(String address){
 		this.address=address;
 	}
-	public Boolean addPhoneDetails(PhoneNumberDetails numberDetails){
-		return (this.numberDetails.add(numberDetails));
+	public void addPhoneDetails(PhoneNumberDetails numberDetails){
+		this.numberDetails.add(numberDetails);
 	}
-	public Name getName(){
+	public String getName(){
 		return name;
 	}
 	public String getAddress(){
 		return address;
 	}
-	public HashSet<PhoneNumberDetails> getPhoneNumbers(){
+	public List<PhoneNumberDetails> getPhoneNumbers(){
 		return numberDetails;
-	}
-	public void printPerson(){
-		System.out.println("Name\t:"+name.getName());
-		System.out.println("Address\t:"+address);
-		Iterator iterator=numberDetails.iterator();
-		while(iterator.hasNext()){
-			PhoneNumberDetails numberDetail=(PhoneNumberDetails)iterator.next();
-			numberDetail.printPhoneNumber();
-		}
-		System.out.println("\n");
 	}
 
 }

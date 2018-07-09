@@ -20,19 +20,23 @@ import org.json.JSONArray;
  *
  * @author cb-mohamedsullaiman
  */
-public class SimpleJSONParsing {
+public class SimpleJSONParser {
 
-    public static void main(String args[]) {
-        try {
-            Path path = Paths.get("/Users/cb-mohamedsullaiman/Downloads/students-teachers.json");
+    public static void main(String args[]) throws IOException,ParseException {
+        
+            Path path = Paths.get(System.getProperty("user.home")+"/Downloads/students-teachers.json");
+            if(!path.toFile().exists()){
+                System.out.println("Json file does not exists");
+                return;
+            }
             BufferedReader bufferedReader = Files.newBufferedReader(path);
-            
+            //Creating the json root object
             JSONObject root = new JSONObject(new JSONTokener(bufferedReader));
-            
+            //Creating the json student object
             JSONObject jsonStudent = root.getJSONObject("Student");
             
             Student student = new Student();
-            
+            //Getting the details of student from json and storing it in the student object
             SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
             Date studentDateOfJoining = dateFormat.parse(jsonStudent.getString("Date Of Joining"));
             
@@ -56,9 +60,10 @@ public class SimpleJSONParsing {
             Standard standard = Standard.valueOf(jsonStudent.getString("Std"));
             student.setStandard(standard);
             
+            //Creating the teacher objects
             JSONObject jsonTeacher = root.getJSONObject("Teacher");
             Teacher teacher = new Teacher();
-            
+            //Getting the teacher details form json and setting up the teacher object
             JSONArray jsonClassesTakingCareOf = jsonTeacher.getJSONArray("Classes Taking Care Of");
             for(int i=0;i<jsonClassesTakingCareOf.length();i++){
                 Standard classTakingCareOf = Standard.valueOf(jsonClassesTakingCareOf.getString(i));
@@ -76,7 +81,7 @@ public class SimpleJSONParsing {
             
             Float salary = jsonTeacher.getFloat("Salary");
             teacher.setSalary(salary);
-            
+            //Printing the student instance details
             System.out.println("********Student instance details*******");
             System.out.println(student.getName());
             System.out.println(student.getId());
@@ -86,7 +91,7 @@ public class SimpleJSONParsing {
                 System.out.println(mark.getSubject());
                 System.out.println(mark.getMarks());   
             }
-            
+            //Printing the teacher instance details
             System.out.println("\n********Teacher instance details*******");
             System.out.println(teacher.getName());
             System.out.println(teacher.getId());
@@ -95,12 +100,6 @@ public class SimpleJSONParsing {
             }
             System.out.println(teacher.getDateOfJoining());
             System.out.println(teacher.getSalary());
-        }
-        catch(IOException ioException){
-            System.out.println("IO Exception");
-        } 
-        catch (ParseException parseException) {
-            System.out.println("Parse exception");
-        }
+        
     }
 }

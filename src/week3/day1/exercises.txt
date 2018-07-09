@@ -1,0 +1,24 @@
+1.
+create database if not exists service_station;
+
+2.
+create table service_station(id int primary key auto_increment, name varchar(30) not null,address varchar(30) not null, contact bigint unsigned );
+
+create table employees ( id int primary key auto_increment, name varchar(30) not null, age tinyint unsigned, contact bigint unsigned );
+
+create table customers ( id int primary key auto_increment, name varchar(30) not null, age tinyint unsigned , contact bigint unsigned , emp_id int ,foreign key(emp_id) references employees(id));
+
+create table vehicles( id int primary key auto_increment, type enum('Car','Bike','Bus') not null, brand varchar(15), color varchar(15) , service_charge float unsigned not null);
+
+create table invoices( id int primary key auto_increment, name_of_owner varchar(30) not null, vehicle int unsigned not null, amount_total float unsigned not null, employee_assigned int unsigned not null,  foreign key(vehicle) references vehicles(id), foreign key( employee_assigned) references employees(id));
+
+
+3.
+drop table if exists service_station;  
+drop table if exists employees;
+drop table if exists customers;
+drop table if exists vehicles;
+drop table if exists invoices;
+
+drop database if exists service_station;
+

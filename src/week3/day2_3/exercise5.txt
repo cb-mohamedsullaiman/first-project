@@ -1,0 +1,12 @@
+
+
+Insert into trains(TrainName) values("Pothigai"),("Pallavan"),("Vaigai"),("Chendur");
+
+insert into Stations (StationCode) values ("CHN-EGM-201"),("MAD-092"),("THRCNDR-283"),("THRNLVI-241"),("KNYKMRI-301");
+
+insert into Coaches values(
+
+1.
+
+Select TrainName from Trains;
+

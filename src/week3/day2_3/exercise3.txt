@@ -1,0 +1,37 @@
+1.
+
+select t2.name from marks t1 inner join students t2 on t1.student_id = t2.id where quarterly is null and half_yearly is null and annual is null;
+
+2.
+
+select t2.name, sum(ifnull(t1.annual,0)) as total, t1.year from marks t1 inner join students t2 on t1.student_id = t2.id group by t1.student_id, year;
+
+3.
+
+select t2.name, sum(ifnull(t1.quarterly,0)) as total, t1.grade from marks t1 inner join students t2 on t1.student_id = t2.id where year = 2003 group by t1.student_id, t1.subject_id;
+
+4.
+
+select t2.name, t1.grade, count(t1.student_id) as no_of_medals from medals t1 inner join students t2 on t1.student_id = t2.id where grade in (9,10) group by t1.student_id, t1.grade having count(t1.student_id)>3;
+
+5.
+
+select t1.name, max(t2.grade) as grade, count(student_id) as no_of_medals from students t1 left join medals t2 on t1.id = t2.student_id group by t1.id having no_of_medals<2;
+
+6.
+
+select t1.name, t2.year from students t1 left join marks on t1.id = t2.student_id where annual>90 and t2.student_id not in (select student_id from medals) group by t2.student_id, t2.year having count(t2.student_id)=5;
+
+7.
+
+select t1.name, t2.game_id, t2.medal_won, t2.year, t2.grade from students t1 inner join medals t2 on t1.id=t2.student_id where t1.id in ( select student_id from marks group by student_id having count(student_id)>3) group by t2.student_id, t2.game_id, t2.year;
+
+8.
+
+select t1.name, truncate(ifnull(count(t3.student_id)/count(distinct subject_id),0),0) as medals, avg(t2.quarterly), avg(t2.half_yearly), avg(t2.annual), t2.year, t2.grade from students t1 left join marks t2 on t1.id = t2.student_id left join medals t3 on t2.student_id = t3.student_id and t2.year = t3.year group by t1.id, t2.year;
+
+// count(distinct subject_id may return null so that expression may return null.. but I don't want no of medal to be null
+
+9.
+
+select t1.name, case when ifnull(sum(t2.quarterly),0)>=450 then "S" when ifnull(sum(t2.quarterly),0)>=400 then "A" when ifnull(sum(t2.quarterly),0)>=350 then "B" when ifnull(sum(t2.quarterly),0)>=300 then "C" when ifnull(sum(t2.quarterly),0)>=250 then "D" when ifnull(sum(t2.quarterly),0)>=200 then "E" else "F" end as quarterly_rating, case when ifnull(sum(t2.half_yearly),0)>=450 then "S" when ifnull(sum(t2.half_yearly),0)>=400 then "A" when ifnull(sum(t2.half_yearly),0)>=350 then "B" when ifnull(sum(t2.half_yearly),0)>=300 then "C" when ifnull(sum(t2.half_yearly),0)>=250 then "D" when ifnull(sum(t2.half_yearly),0)>=200 then "E" else "F" end as half_yearly_rating, case when ifnull(sum(t2.annual),0)>=450 then "S" when ifnull(sum(t2.annual),0)>=400 then "A" when ifnull(sum(t2.annual),0)>=350 then "B" when ifnull(sum(t2.annual),0)>=300 then "C" when ifnull(sum(t2.annual),0)>=250 then "D" when ifnull(sum(t2.annual),0)>=200 then "E" else "F" end as annual_rating, t2.year, t2.grade  from students t1 left join marks t2 on t1.id=t2.student_id group by t1.id, t2.year;

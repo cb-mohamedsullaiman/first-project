@@ -6,6 +6,7 @@ public class Invoice{
 	private Float amountTotal;
 	private String employeeAssigned;
 	public Invoice(){
+            amountTotal = (float) 0.0;
 	}
 	public Invoice(String customerName,Vehicle vehicle,float amountTotal,String employeeAssigned){
 		this.customerName=customerName;

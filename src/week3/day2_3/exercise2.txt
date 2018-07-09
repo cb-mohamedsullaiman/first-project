@@ -1,0 +1,32 @@
+Just inner join
+ 
+
+select t1.id, t2.name, t1.subject_id, t1.quarterly, t1.half_yearly, t1.annual, t1.year, t1.grade, from marks t1 inner join students t2 on t1.student_id = t2.id;
+
+
+For marks queries,
+1.
+
+select t1.id, t2.name, t1.subject_id, t1.quarterly, t1.half_yearly, t1.annual, t1.year, t1.grade from marks t1 inner join students t2 on t1.student_id = t2.id where annual is null;
+
+2.
+
+select t2.name, t1.subject_id, t1.year from marks t1 inner join students t2 on t1.student_id=t2.id where annual is null;
+
+3.
+
+select t2.name, t1.subject_id, t1.year, from marks t1 inner join students t2 on t1.student_id = t2.id where not(t1.quarterly is null and t1.half_yearly is null and t1.annual is null);
+
+4.
+
+select t2.name, t1.subject_id, t1.year from marks t1 inner join students t2 on t1.student_id = t2.id where quarterly > 90 and half_yearly > 90 and annual > 90;
+
+5. 
+
+select t2.name, t1.subject_id, (ifnull(t1.quarterly,0)+ifnull(t1.half_yearly,0)+ifnull(t1.annual,0))/3 as average, t1.year from marks t1 inner join students t2 on t1.student_id = t2.id;
+
+6.
+
+select t2.name, t1.subject_id, (ifnull(t1.quarterly,0)+ifnull(t1.half_yearly,0)+ifnull(t1.annual,0))/3 as average, t1.year from marks t1 inner join students t2 on t1.student_id = t2.id where year in(2003,2007);
+
+

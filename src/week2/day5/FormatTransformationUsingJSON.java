@@ -13,9 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -23,7 +20,6 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.CDL;
-import org.json.JSONException;
 import org.json.JSONTokener;
 
 /**
@@ -31,77 +27,84 @@ import org.json.JSONTokener;
  * @author cb-mohamedsullaiman
  */
 public class FormatTransformationUsingJSON {
-    public static void createJSONFromCSV(Path sourcePath){
-        JSONObject root = new JSONObject();
-        try(BufferedReader bufferedReader = Files.newBufferedReader(sourcePath); CSVParser csvParser = CSVParser.parse(bufferedReader,CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())){
-            JSONArray customerDetails = new JSONArray();
-            for(CSVRecord csvRecord : csvParser){
-                JSONObject customerDetail = new JSONObject();
-                customerDetail.put("Customer Id", csvRecord.get("Customer Id"));
-                customerDetail.put("Subscription Id", csvRecord.get("Subscription Id"));
-                customerDetail.put("Invoice Id",csvRecord.get("Invoice Number"));
-                SimpleDateFormat givenDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                SimpleDateFormat desiredDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                customerDetail.put("Invoice Date", desiredDateFormat.format(givenDateFormat.parse(csvRecord.get("Invoice Date"))));
-                customerDetail.put("Start Date",desiredDateFormat.format(givenDateFormat.parse(csvRecord.get("Start Date"))));
-                customerDetail.put("Amount",Float.parseFloat(csvRecord.get("Amount"))/100);
-                customerDetail.put("Status", csvRecord.get("Status"));
-                customerDetail.put("Paid On", csvRecord.get("Paid On"));
-                customerDetail.put("Next Retry", csvRecord.get("Next Retry"));
-                customerDetail.put("Refunded Amount",Float.parseFloat(csvRecord.get("Refunded Amount"))/10);
-                customerDetail.put("Recurring", csvRecord.get("Recurring"));
-                customerDetail.put("First Invoice", csvRecord.get("First Invoice"));
-                customerDetail.put("Tax Total", Float.parseFloat(csvRecord.get("Tax Total"))/100);
-                JSONObject customerPersonalDetails = new JSONObject();
-                customerPersonalDetails.put("First Name", csvRecord.get("Customer First Name"));
-                customerPersonalDetails.put("Last Name",csvRecord.get("Customer Last Name"));
-                customerPersonalDetails.put("Email",csvRecord.get("Customer Email"));
-                customerPersonalDetails.put("Company",csvRecord.get("Customer Company"));
-                customerDetail.put("Customer Detail", customerPersonalDetails.toString());
-                customerDetails.put(customerDetail);
-            }
-            root.put("Customer Details", customerDetails);
-            BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get("/Users/cb-mohamedsullaiman/sample/config.json"));
-            root.write(bufferedWriter);
-            bufferedWriter.flush(); 
-        }
-        catch(IOException ioException){
-            System.out.println("IO Exception");
-        }
-        catch(ParseException parseException){
-            parseException.printStackTrace();
-            System.out.println("Parse exception found");
-        }
-    }
-    public static void createCSVFromJSON(Path jsonPath, Path destinationPath){
-        try{
-            JSONObject root = new JSONObject(new JSONTokener(Files.newBufferedReader(jsonPath)));
-            JSONArray jsonCustomerDetails = root.getJSONArray("Customer Details");
-            String nameArray[] = {"Customer Id","Subscription Id","Invoice Id","Invoice Date","Start Date","Amount","Status","Paid On","Next Retry","Refunded Amount","Recurring","First Invoice","Tax Total","Customer Detail"};
-            JSONArray names = new JSONArray(nameArray);
-            String csvFile="";
-            for(int i=0;i<nameArray.length;i++){
-                csvFile+=nameArray[i];
-                if(i<nameArray.length-1){
-                    csvFile+=",";
-                }
-            }
-            csvFile+="\n";
-            // String header = "Customer Id,Subscription Id,Invoice Id,Invoice Date,Start Date,Amount,\"Status\",\"Paid On\",\"Next Retry\",\"Refunded Amount\",\"Recurring\",\"First Invoice\",\"Tax Total\",\"Customer Details\""
-            csvFile = csvFile + CDL.toString(names,jsonCustomerDetails);
-            FileUtils.writeStringToFile(destinationPath.toFile(), csvFile, (String)null);
+
+    public static void createJSONFromCSV(Path sourcePath, Path jsonPath) throws IOException, ParseException {
+        //Checking whether the csv file exists
+        if (!sourcePath.toFile().exists()) {
+            System.out.print("CSV file does not exists");
             throw new IOException();
         }
-        catch(IOException ioException){
-            
+        JSONObject root = new JSONObject();
+        BufferedReader bufferedReader = Files.newBufferedReader(sourcePath);
+        CSVParser csvParser = CSVParser.parse(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
+        JSONArray customerDetails = new JSONArray();
+        //For each record
+        for (CSVRecord csvRecord : csvParser) {
+            JSONObject customerDetail = new JSONObject();
+            String[] csvHeader = {"Customer ID", "Subscription Id", "Invoice Number", "Status", "Paid On", "Next Retry", "Recurring", "First Invoice", "Invoice Date", "Start Date", "Refunded Amount", "Amount", "Tax Total", "Customer First Name", "Customer Last Name", "Customer Email", "Customer Company"};
+            String[] jsonHeader = {"Customer Id", "Subscription Id", "Invoice Id", "Status", "Paid On", "Next Retry", "Recurring", "First Invoice", "Invoice Date", "Start Date", "Refunded Amount", "Amount", "Tax Total", "First Name", "Last Name", "Email", "Company"};
+            //For first 8 fields there is no alteration
+            for (int i = 0; i < 8; i++) {
+                customerDetail.put(jsonHeader[i], csvRecord.get(csvHeader[i]));
+            }
+            //We have to change the date format for next two fields
+            SimpleDateFormat givenDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat desiredDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            customerDetail.put(jsonHeader[8], desiredDateFormat.format(givenDateFormat.parse(csvRecord.get(csvHeader[8]))));
+            customerDetail.put(jsonHeader[9], desiredDateFormat.format(givenDateFormat.parse(csvRecord.get(csvHeader[9]))));
+            //We have to change the value for the next three fields
+            customerDetail.put(jsonHeader[10], Float.parseFloat(csvRecord.get(csvHeader[10])) / 10);
+            customerDetail.put(jsonHeader[11], Float.parseFloat(csvRecord.get(csvHeader[11])) / 100);
+            customerDetail.put(jsonHeader[12], Float.parseFloat(csvRecord.get(csvHeader[12])) / 100);
+            //This is for the creating a new json object with ustomer personal details
+            JSONObject customerPersonalDetails = new JSONObject();
+            for (int i = 13; i < 16; i++) {
+                customerPersonalDetails.put(jsonHeader[i], csvRecord.get(csvHeader[i]));
+            }
+            //This is for single customer detail
+            customerDetail.put("Customer Detail", customerPersonalDetails);
+            //This will add the single customer detail to customer details array
+            customerDetails.put(customerDetail);
         }
+        root.put("Customer Details", customerDetails);
+        //This will create json file
+        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(jsonPath)) {
+            root.write(bufferedWriter);
+        }
+
     }
-    public static void main(String args[]){
-        Path sourcePath = Paths.get("/Users/cb-mohamedsullaiman/Downloads/Input.csv");
-        createJSONFromCSV(sourcePath);
-        //System.out.println(root.toString());
-        Path destinationPath = Paths.get("/Users/cb-mohamedsullaiman/sample/output.csv");
-        Path jsonPath =  Paths.get("/Users/cb-mohamedsullaiman/sample/config.json");
-        createCSVFromJSON(jsonPath,destinationPath);
+
+    public static void createCSVUsingJSON(Path jsonPath, Path destinationPath) throws IOException {
+        //It will check whether the json file exists or not
+        if (!jsonPath.toFile().exists()) {
+            System.out.println("JSON file does not exists");
+            throw new IOException();
+        }
+        JSONObject root = new JSONObject(new JSONTokener(Files.newBufferedReader(jsonPath)));
+        JSONArray jsonCustomerDetails = root.getJSONArray("Customer Details");
+        String headerArray[] = {"Customer Id", "Subscription Id", "Invoice Id", "Invoice Date", "Start Date", "Amount", "Status", "Paid On", "Next Retry", "Refunded Amount", "Recurring", "First Invoice", "Tax Total", "Customer Detail"};
+        JSONArray header = new JSONArray(headerArray);
+        //This is for adding the header to the first line of the csv file
+        String csvFile = "";
+        for (int i = 0; i < headerArray.length; i++) {
+            csvFile += headerArray[i];
+            if (i < headerArray.length - 1) {
+                csvFile += ",";
+            }
+        }
+        csvFile += "\n";
+        //This is for adding the entire csv file without header
+        csvFile = csvFile + CDL.toString(header, jsonCustomerDetails);
+        //This is for writing the entire csv file into the destination path
+        FileUtils.writeStringToFile(destinationPath.toFile(), csvFile, (String) null);
+
+    }
+
+    public static void main(String args[]) throws IOException, ParseException {
+        Path sourcePath = Paths.get(System.getProperty("user.home") + "/Downloads/Input.csv");
+        Path jsonPath = Paths.get(System.getProperty("user.home") + "/sample/config.json");
+        createJSONFromCSV(sourcePath, jsonPath);
+        Path destinationPath = Paths.get(System.getProperty("user.home") + "/sample/output.csv");
+        createCSVUsingJSON(jsonPath, destinationPath);
     }
 }

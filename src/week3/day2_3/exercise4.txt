@@ -1,0 +1,43 @@
+
+
+Creation
+
+1. 
+
+create database if not exists railway_bookings;
+
+2. 
+
+use railway_bookings;
+
+3.
+
+create table if not exists Trains (TrainNo int unsigned primary key auto_increment, TrainName varchar(30) not null);
+
+4.
+
+create table if not exists Stations (StationId int unsigned primary key auto_increment, StationCode varchar(30) not null);
+
+5.
+
+create table if not exists Coaches (CoachCode int unsigned primary key, CostPerKm float unsigned not null default 0);
+
+6.
+
+create table if not exists TrainCoaches (TrainNo int unsigned not null, CoachCode int unsigned not null, NoOfSeats int not null default 0, foreign key(TrainNo) references Trains(TrainNo),foreign key(CoachCode) references Coaches(CoachCode));
+
+7.
+
+create table if not exists Routes (RouteId int unsigned primary key auto_increment, OriginStationId int unsigned not null, DestinationStationId int unsigned not null, DistanceInKms float unsignedd not null default 0, foreign key(OriginStationId) references Stations(StationId), foreign key (DestinationStationId) references Stations(StationId));  
+
+8.
+
+create table if not exists TrainRouteMaps (RouteId int unsigned not null, TrainNo int unsigned not null, ArrivalTime timestamp(2) not null, DepartureTime timestamp(2) not null, DurationInMins int unsigned not null default 0 ,foreign key(RouteId) references Routes(RouteId),foreign key(TrainNo) references Trains(TrainNo),primary key(RouteId, TrainNo)); 
+
+9.
+
+create table if not exists Bookings ( BookingRefNo int unsigned primary key auto_increment, RouteId int unsigned not null, TrainNo int unsigned not null, CoachCode int unsigned not null, DateOfJourney Date not null, DateOfBooking Date not null, NoOfTickets int unsigned not null default 0, foreign key(RouteId) references Routes(RouteId),foreign key(TrainNo) references Trains(TrainNo), foreign key(CoachCode) references Coaches(CoachCode));
+
+10.
+
+Create table if not exists Users ( UserId varchar(15) primary key, LoginId varchar(15), LPassword varchar(15));
