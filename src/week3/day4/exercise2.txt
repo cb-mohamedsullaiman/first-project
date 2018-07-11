@@ -1,0 +1,35 @@
+First exercise:
+1.
+
+create table students_summary (student_id int primary key, student_name varchar(30) not null, year year(4), percentage float , no_of_medals_received int default 0);
+
+2.
+
+select t1.id,t1.name, t2.year, avg(t2.annual), (select count(student_id) from medals where student_id =t2.student_id and year = t2.year) from students t1 left join marks t2 on t1.id = t2.student_id group by t2.student_id,t2.year order by t1.id;    
+
+insert into students_summary(
+select t1.id,t1.name, ifnull(t2.year,0), avg(t2.annual), (select count(student_id) from medals where student_id =t2.student_id and year = t2.year) from students t1 left join marks t2 on t1.id = t2.student_id group by t2.student_id,t2.year order by t1.id
+);
+
+Second exercise:
+
+1.
+
+alter table marks add column average float not null;
+
+create trigger set_average_before_insert before insert  on marks 
+for each row
+set new.average = (new.quarterly+new.half_yearly+new.annual)/3;
+
+create trigger set_average_before_update  before update on marks 
+for each row
+set new.average = (new.quarterly+new.half_yearly+new.annual)/3;
+
+2.
+
+alter table medals add medal_received varchar(10) after medal_won;
+
+update medals set medal_received=medal_won;
+
+alter table medals drop medal_won;
+

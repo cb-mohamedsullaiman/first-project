@@ -34,6 +34,7 @@ public class FileExtensionScanner {
             } else if (Files.isRegularFile(path) && path.toString().contains(".")) {    //If it is a regular file, then it will get the extension and map it
                 int extensionIndex = path.toString().lastIndexOf('.');                  //Getting the last index of '.'
                 String extension = path.toString().substring(extensionIndex + 1);       //Getting the extension
+                
                 mapExtensionAgainstOccurence(extension);                                //Map the extension
             }
         }
@@ -42,6 +43,7 @@ public class FileExtensionScanner {
     public void printAllExtensions(){
         map.forEach((k, v) -> System.out.println(k + "\t\t" + v));
     }
+    
     public static void main(String... args) throws IOException {
 
         FileExtensionScanner extensionScanner = new FileExtensionScanner();
@@ -55,6 +57,10 @@ public class FileExtensionScanner {
             return;
         }
         Path path = Paths.get(System.getProperty("user.home")).resolve(directory);
+        if(!Files.exists(path)){
+            System.out.println("Path does not exists");
+            return;
+        }
         extensionScanner.scanAllExtensions(path);
         extensionScanner.printAllExtensions();
     }

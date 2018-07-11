@@ -14,10 +14,10 @@ import java.util.regex.Pattern;
 public class PhoneDirectory {
 
     private Set<Long> phoneNumbers = new HashSet<>();
-    private Map<String, ArrayList<Person>> personMap = new TreeMap<>();
-    private Map<Long, Person> phoneNumberMap = new HashMap<>();
+    private Map<String, ArrayList<Person>> personMap = new TreeMap<>();             //Person against his name
+    private Map<Long, Person> phoneNumberMap = new HashMap<>();                        // Person against his phone number
 
-    public Boolean retrievePersonByName(String personName) {
+    public boolean retrievePersonByName(String personName) {
         if (personMap.isEmpty()) {
             return false;
         }
@@ -32,7 +32,7 @@ public class PhoneDirectory {
         return isPersonRetrieved;
     }
 
-    public Boolean retrievePersonByPartialName(String partialName) {
+    public boolean retrievePersonByPartialName(String partialName) {
         if (personMap.isEmpty()) {
             return false;
         }
@@ -60,25 +60,19 @@ public class PhoneDirectory {
     }
 
     public void printPersonDetails(ArrayList<Person> personList) {
-        for (int i = 0; i < personList.size(); i++) {
-            Person person = personList.get(i);
+        for (Person person : personList) {
             System.out.println("\nName\t:" + person.getName());
             System.out.println("Address\t:" + person.getAddress());
-            Iterator iterator = person.getPhoneNumbers().iterator();
-            while (iterator.hasNext()) {
-                PhoneNumberDetails numberDetail = (PhoneNumberDetails) iterator.next();
+            for (PhoneNumberDetails numberDetail : person.getPhoneNumbers()) {
                 System.out.println(numberDetail.getPhoneNumber() + "\t-" + numberDetail.getTypeOfUsage());
             }
-
         }
     }
 
     public void printPersonDetails(Person person) {
         System.out.println("Name\t:" + person.getName());
         System.out.println("Address\t:" + person.getAddress());
-        Iterator iterator = person.getPhoneNumbers().iterator();
-        while (iterator.hasNext()) {
-            PhoneNumberDetails numberDetail = (PhoneNumberDetails) iterator.next();
+        for (PhoneNumberDetails numberDetail : person.getPhoneNumbers()) {
             System.out.println(numberDetail.getPhoneNumber() + "\t-" + numberDetail.getTypeOfUsage());
         }
         System.out.println("\n");
@@ -152,7 +146,7 @@ public class PhoneDirectory {
                         System.out.println("Enter the phone number:");
                         Long phoneNumber = scanner.nextLong();
                         if (!((phoneDirectory.checkLength(phoneNumber, 10)) && !(phoneDirectory.checkExistenceOfPhoneNumber(phoneNumber)))) {
-                            System.out.println("Type yes to continue");
+                            System.out.println("Type yes to continue adding phone numbers...");
                             continue;
                         }
                         numberDetail.setPhoneNumber(phoneNumber);
@@ -172,7 +166,7 @@ public class PhoneDirectory {
                                 break;
                             default:
                                 System.out.println("\n*********Invalid choice***********");
-                                System.out.println("Type yes to continue");
+                                System.out.println("Type yes to continue adding phone numbers..");
                                 phoneDirectory.phoneNumbers.remove(phoneNumber);
                                 phoneDirectory.phoneNumberMap.remove(phoneNumber);
                                 continue;

@@ -44,16 +44,20 @@ public class PhoneDirectoryUsingCSV {
 
         for (CSVRecord csvRecord : csvParser) {
 
-            String name = csvRecord.get("Name");            
+            String name = csvRecord.get("Name"); 
+            
             if (name.length() == 0) {                       //Name should not be empty
                 System.out.println("Name field cannot be empty ... check record number " + csvRecord.getRecordNumber());
                 throw new IOException();
             }
+            
             String address = csvRecord.get("Address");
+            
             if (address.length() == 0) {                //Address cannot be empty
                 System.out.println("Address cannot be empty .. check record number  " + csvRecord.getRecordNumber());
                 throw new IOException();
             }
+            
             Long phoneNumber1 = Long.parseLong(csvRecord.get("Phone Number1"));
             String type1 = csvRecord.get("Type1");
             Long phoneNumber2 = Long.parseLong(csvRecord.get("Phone Number2"));
@@ -87,18 +91,22 @@ public class PhoneDirectoryUsingCSV {
             if (phoneNumber3 != 0) {
                 phoneNumberMap.put(phoneNumber3, person);
             }
+            
             PhoneNumberDetails numberDetail1 = new PhoneNumberDetails();
             numberDetail1.setPhoneNumber(phoneNumber1);
             numberDetail1.setType(PhoneNumberDetails.TypeOfUsage.valueOf(type1.toUpperCase()));
             person.addPhoneDetails(numberDetail1);
+            
             PhoneNumberDetails numberDetail2 = new PhoneNumberDetails();
             numberDetail2.setPhoneNumber(phoneNumber2);
             numberDetail2.setType(PhoneNumberDetails.TypeOfUsage.valueOf(type2.toUpperCase()));
             person.addPhoneDetails(numberDetail2);
+            
             PhoneNumberDetails numberDetail3 = new PhoneNumberDetails();
             numberDetail3.setPhoneNumber(phoneNumber3);
             numberDetail3.setType(PhoneNumberDetails.TypeOfUsage.valueOf(type3.toUpperCase()));
             person.addPhoneDetails(numberDetail3);
+            
             ArrayList<Person> persons = new ArrayList<>();
             if (personMap.containsKey(name)) {
                 persons = personMap.get(name);
@@ -184,13 +192,17 @@ public class PhoneDirectoryUsingCSV {
         Path sourcePath = Paths.get(System.getProperty("user.home") + "/sample/phone_directory.csv");
         phoneDirectory.readPersonDetailsFromCSV(sourcePath);
         do {
-            System.out.println("1.Retrieve the person details based on name\n2.Retrieve the person details based on partial matching\n3.Retrieve the person details based on phone number\n4.Exit");
+            System.out.println("\n1.Retrieve the person details based on name\n2.Retrieve the person details based on partial matching\n3.Retrieve the person details based on phone number\n4.Exit");
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
                 case 1:
                     System.out.println("Enter the person name");
                     String nameOfThePersonToBeRetrieved = scanner.nextLine();
+                    if(nameOfThePersonToBeRetrieved.length()==0){
+                        System.out.println("Person Name cannot be empty.. Try again");
+                        continue;
+                    }
                     if (!phoneDirectory.retrievePersonByName(nameOfThePersonToBeRetrieved)) {
                         System.out.println("\n******No persons found with this name******");
                     }
@@ -198,6 +210,10 @@ public class PhoneDirectoryUsingCSV {
                 case 2:
                     System.out.println("Enter the partial name of the person");
                     String partialName = scanner.nextLine();
+                    if(partialName.length()==0){
+                        System.out.println("We cannot search without name.... Try again");
+                        continue;
+                    }
                     if (!phoneDirectory.retrievePersonByPartialName(partialName)) {
                         System.out.println("\n*****No persons found related to this name*****");
                     }
@@ -205,7 +221,7 @@ public class PhoneDirectoryUsingCSV {
                 case 3:
                     System.out.println("Enter the phone no of the person");
                     Long personPhoneNumber = scanner.nextLong();
-                    scanner.nextLine();
+                    scanner.nextLine();                    
                     if (!phoneDirectory.retrievePersonByPhoneNumber(personPhoneNumber)) {
                         System.out.println("\n******No persons found with that phone number*****");
                     }

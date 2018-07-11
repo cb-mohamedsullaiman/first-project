@@ -104,6 +104,7 @@ public class FormatTransformationUsingJSON {
         Path sourcePath = Paths.get(System.getProperty("user.home") + "/Downloads/Input.csv");
         Path jsonPath = Paths.get(System.getProperty("user.home") + "/sample/config.json");
         createJSONFromCSV(sourcePath, jsonPath);
+        
         Path destinationPath = Paths.get(System.getProperty("user.home") + "/sample/output.csv");
         createCSVUsingJSON(jsonPath, destinationPath);
     }

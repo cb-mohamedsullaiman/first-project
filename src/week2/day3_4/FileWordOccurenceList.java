@@ -15,8 +15,7 @@ public class FileWordOccurenceList {
     private Map<String, String> map = new TreeMap<>();
 
     public void listAllWordOccurences(File file) throws IOException {
-        if (!file.exists()) //If the file does not exists
-        {
+        if (!file.exists()) {   //If the file does not exists
             System.out.println("File does not exists");
             return;
         }
@@ -56,9 +55,13 @@ public class FileWordOccurenceList {
     public static void main(String args[]) throws IOException {
 
         FileWordOccurenceList wordOccurenceFinder = new FileWordOccurenceList();
+        
         File sourceFile = FileUtils.getFile(System.getProperty("user.home") + "/sample/iostreams.txt");
+        
         wordOccurenceFinder.listAllWordOccurences(sourceFile);
+        
         File destinationFile = FileUtils.getFile(System.getProperty("user.home") + "/sample/iostreams_output.txt");
+        
         wordOccurenceFinder.writeAllOccurencesToFile(destinationFile);
     }
 }

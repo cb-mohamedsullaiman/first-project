@@ -1,0 +1,25 @@
+Alter table:
+
+1.
+
+alter table marks add column created_at timestamp, add column updated_at timestamp;
+
+alter table students add column created_at timestamp, add column updated_at timestamp;
+
+alter table medals add column created_at timestamp, add column updated_at timestamp;
+
+2.
+
+
+update marks set quarterly = case when quarterly is null then 0 else quarterly end, half_yearly = case when half_yearly is null then 0 else half_yearly end, annual = case when annual is null then 0 else annual end;
+
+alter table marks modify column quarterly int not null, modify column half_yearly int not null, modify column annual int not null;
+
+
+Insert and update:
+
+3.
+
+Alter table marks modify column created_at timestamp default now() , modify column updated_at timestamp default now() on update now();
+
+Alter table students modify column created_at timestamp default now(), modify column updated_at timestamp default now on update now();

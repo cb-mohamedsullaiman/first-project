@@ -11,19 +11,24 @@ import java.nio.file.DirectoryStream;
 public class FileMover {
 
     public static void moveFilesToDestination(Path sourcePath, Path destinationPath) throws IOException {
+        
+        if(!Files.exists(sourcePath)){
+            System.out.println("Source path does not exists");
+            return;
+        }
 
         DirectoryStream<Path> paths = Files.newDirectoryStream(sourcePath);     //Creating a directory stream
         for (Path path : paths) {
             if (Files.isDirectory(path)) {                      //If it is a directory the function will be called reecursively
                 moveFilesToDestination(path, destinationPath);
             } 
-            else if (Files.isRegularFile(path)) {
+            else if (Files.isRegularFile(path)) {       //There may be some special files in a directory which our computer uses
 
                 String fileName = path.getFileName().toString();        //getting the file name
                 System.out.println(fileName);
-                File parentDirectoryFile = new File(destinationPath.toString());        //getting the destination path
-                System.out.println(parentDirectoryFile.getName());
-                File newFile = new File(parentDirectoryFile, fileName);         //Resolving filename with the destination directory
+                File parentDirectory = new File(destinationPath.toString());        //getting the destination path
+                System.out.println(parentDirectory.getName());
+                File newFile = new File(parentDirectory, fileName);         //Resolving filename with the destination directory
                 System.out.println(newFile.getName());
                 if (!newFile.exists()) {                            //If the new file name does not exists
                     System.out.println(destinationPath.toString());
@@ -47,7 +52,7 @@ public class FileMover {
                             numberOfFiles = Integer.parseInt(fileNameWithoutExtension.substring(fileCount + 1)) + 1;
                             fileName = fileNameWithoutExtension.substring(0, fileCount) + '-' + numberOfFiles + fileExtension;
                         }
-                        File newFile1 = new File(parentDirectoryFile, fileName);
+                        File newFile1 = new File(parentDirectory, fileName);
                         if (!newFile1.exists()) {
                             Files.move(path, destinationPath.resolve(fileName));
                             isMoved = true;
@@ -58,17 +63,22 @@ public class FileMover {
             }
         }
     }
-
+    
+    
     public static void main(String args[]) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the directory you want to move");
         String sourceDirectory = scanner.nextLine();
+        
         if (sourceDirectory.length() == 0) {
             System.out.println("Source Directory cannot be empty");
             return;
         }
+        
+        
         System.out.println("Enter the destination directory");
         String destinationDirectory = scanner.nextLine();
+        
         if (destinationDirectory.length() == 0) {
             System.out.println("Destination directory cannot be empty");
             return;

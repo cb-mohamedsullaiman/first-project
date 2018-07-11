@@ -32,11 +32,15 @@ create table if not exists Routes (RouteId int unsigned primary key auto_increme
 
 8.
 
-create table if not exists TrainRouteMaps (RouteId int unsigned not null, TrainNo int unsigned not null, ArrivalTime timestamp(2) not null, DepartureTime timestamp(2) not null, DurationInMins int unsigned not null default 0 ,foreign key(RouteId) references Routes(RouteId),foreign key(TrainNo) references Trains(TrainNo),primary key(RouteId, TrainNo)); 
+create table if not exists TrainRouteMaps (RouteId int unsigned not null, TrainNo int unsigned not null, ArrivalTime time not null, DepartureTime time not null, DurationInMins int  ,foreign key(RouteId) references Routes(RouteId),foreign key(TrainNo) references Trains(TrainNo),primary key(RouteId, TrainNo)); 
+
+create trigger duration_update before insert on TrainRouteMaps for each row set New.DurationInMins = time_to_sec(timediff(NEW.ArrivalTime,NEW.DepartureTime))/60 ;
 
 9.
 
-create table if not exists Bookings ( BookingRefNo int unsigned primary key auto_increment, RouteId int unsigned not null, TrainNo int unsigned not null, CoachCode int unsigned not null, DateOfJourney Date not null, DateOfBooking Date not null, NoOfTickets int unsigned not null default 0, foreign key(RouteId) references Routes(RouteId),foreign key(TrainNo) references Trains(TrainNo), foreign key(CoachCode) references Coaches(CoachCode));
+create table if not exists Bookings ( BookingRefNo int unsigned primary key auto_increment, RouteId int unsigned not null, TrainNo int unsigned not null, CoachCode int unsigned not null, DateOfJourney Date not null, DateOfBooking Date not null, NoOfTickets int unsigned not null default 0, foreign key(RouteId) references TrainRouteMaps(RouteId),foreign key(TrainNo) references TrainRouteMaps(TrainNo), foreign key(CoachCode) references Coaches(CoachCode));
+
+create trigger bookings_check before insert on Bookings for each row begin if(new.DateOfBooking>new.DateOfJourney) then signal sqlstate '02000' set message_text = "Warning: Journey date cannot be before booking date"; end if; if(new.NoOfTickets> (select NoOfSeats from TrainCoaches where TrainCoaches.CoachCode = new.CoachCode and TrainCoaches.TrainNo = new.TrainNo)) then signal SQLSTATE '02000' set message_text = "Warning: No of tickets for a coach cannot be greater than no of seats" ; end if; end$$
 
 10.
 

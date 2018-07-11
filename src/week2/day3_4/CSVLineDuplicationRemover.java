@@ -44,8 +44,11 @@ public class CSVLineDuplicationRemover {
     public static void main(String args[]) throws IOException {
         
         CSVLineDuplicationRemover lineDuplicationRemover = new CSVLineDuplicationRemover();
+        
         String sourceFilePath = System.getProperty("user.home") + "/sample/personal_details.csv";
+        
         String destinationFilePath = System.getProperty("user.home") + "/Users/cb-mohamedsullaiman/sample/personal_details_output.csv";
+        
         lineDuplicationRemover.writeUniqueLinesToDestination(sourceFilePath, destinationFilePath);
 
     }

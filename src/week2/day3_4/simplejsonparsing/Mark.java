@@ -13,9 +13,7 @@ public class Mark {
     private Integer marks;
     private String subject;
     
-    public Mark(){
-        
-    }
+    
     public Mark(Integer marks, String subject){
         this.marks=marks;
         this.subject=subject;

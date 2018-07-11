@@ -66,10 +66,12 @@ public class PhoneDirectoryUsingJSON {
                 person.setAddress(address);
 
                 JSONArray jsonPhoneDetails = jsonPerson.getJSONArray("Phone Number Details");
+                
                 if(jsonPhoneDetails.length()==0){
                     System.out.println("A person should have atleast one phone number");
                     throw new IOException();
                 }
+                
                 for (int j = 0; j < jsonPhoneDetails.length(); j++) {
                     JSONObject jsonPhoneDetail = jsonPhoneDetails.getJSONObject(j);
                     Long phoneNumber = jsonPhoneDetail.getLong("Phone Number");
@@ -181,6 +183,10 @@ public class PhoneDirectoryUsingJSON {
                 case 1:
                     System.out.println("Enter the person name");
                     String nameOfThePersonToBeRetrieved = scanner.nextLine();
+                    if(nameOfThePersonToBeRetrieved.length()==0){
+                        System.out.println("Person Name cannot be empty.. Try again");
+                        continue;
+                    }
                     if (!phoneDirectory.retrievePersonByName(nameOfThePersonToBeRetrieved)) {
                         System.out.println("\n******No persons found with this name******");
                     }
@@ -188,6 +194,10 @@ public class PhoneDirectoryUsingJSON {
                 case 2:
                     System.out.println("Enter the partial name of the person");
                     String partialName = scanner.nextLine();
+                    if(partialName.length()==0){
+                        System.out.println("We cannot search without name.... Try again");
+                        continue;
+                    }
                     if (!phoneDirectory.retrievePersonByPartialName(partialName)) {
                         System.out.println("\n*****No persons found related to this name*****");
                     }
