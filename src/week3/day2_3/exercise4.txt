@@ -1,6 +1,5 @@
 
-
-Creation
+Create table and table elements for this model and list the queries used
 
 1. 
 

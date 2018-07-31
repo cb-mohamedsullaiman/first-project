@@ -1,0 +1,37 @@
+<style>
+    #top-bar{
+        padding: 18px;
+        background-color: #6666ff;
+        color: white;
+        display: flex;
+        justify-content: space-between;                
+    }
+    a.top-left{
+        text-decoration: none;
+        color: white;
+    }
+    a.top-left:hover{
+        text-decoration-line: underline;               
+    }
+    span.horizontal{
+        margin: 0 12px;
+    }
+
+
+</style>
+<div id="top-bar">
+    <div style=" font-weight: bold">
+        Space Portal
+    </div>
+    <div id="top-right">
+        Hi&nbsp;
+        <% out.println(firstName);               
+        %>
+        <span class="horizontal">
+            <a href="deactivate" class="top-left">Deactivate Account</a>
+        </span>
+        <span class="horizontal">
+            <a href="logout.jsp" class="top-left">Logout</a>
+        </span>
+    </div>    
+</div>

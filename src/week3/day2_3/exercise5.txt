@@ -33,90 +33,153 @@ Insert into Users values('Sullaiman','Sullai97','loveindia'),('salai','Salai84',
 
 
 
+********Don’t give the internal db id’s. Always try to show the names like train name instead of train id, station name instead of station id etc.,*******
+
 
 1.
+Qn:
+To get the list of all trains
 
+Ans:
 Select TrainName from Trains;
 
 2.
+Qn:
+To get the list of all train routes in the database
 
+Ans:
 Select (select StationCode from Stations where stationid = originstationid) as Origin,(select stationcode from stations where stationid = destinationstationid )as Destinationm from routes ;
 
 3.
+Qn:
+Total number of seats in the each train.
 
+Ans:
 Select t1.TrainName ,sum(t2.NoOfSeats) as Total_No_Of_Seats from Trains t1 inner join TrainCoaches t2 on t1.TrainNo=t2.TrainNo group by t1.TrainNo;
 
 4.
+Qn:
+List of all routes goes to Bangalore
 
+Ans:
 Select (select StationCode from Stations where StationId = OriginStationId) as Origin,(select StationCode from Stations where StationId = DestinationStationId) as Destination from routes having Destination = "Bangalore";
 
 5.
+Qn:
+List of all routes starting from bangalore, calcutta and chennai
 
+Ans:
 Select (select StationCode from Stations where StationId = OriginStationId) as Origin,(select StationCode from Stations where StationId = DestinationStationId) as Destination from routes having Origin = "bangalore" || Origin = "Chennai" || Origin = "Calcutta";
 
 6.
+Qn:
+List of all the bookings booked between 1st Jan 2005 and 31st Dec 2005
 
+Ans:
 Select (select(select StationCode from Stations where StationId = OriginStationId) from routes where routes.RouteId = bookings.RouteId) as Origin,(select(select StationCode from Stations where StationId = DestinationStationId) from routes where routes.RouteId = bookings.RouteId) as Destination, (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo) as TrainName, CoachCode, DateOfJourney, DateOfBooking, NoOfTickets from bookings where DateOfJourney between "2005-01-01" and "2005-12-31";
 
 7.
+Qn:
+List of all trains whose name begins with B
 
+Ans:
 Select TrainName from Trains where TrainName like 'B%';
 
 8.
+Qn:
+List of all bookings where DOB is not null
 
+Ans:
 Select (select(select StationCode from Stations where StationId = OriginStationId) from routes where routes.RouteId = bookings.RouteId) as Origin,(select(select StationCode from Stations where StationId = DestinationStationId) from routes where routes.RouteId = bookings.RouteId) as Destination, (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo) as TrainName, CoachCode, DateOfJourney, DateOfBooking, NoOfTickets from bookings where DateOfBooking is not null;
 
 9.
+Qn:
+List of all bookings for the booked in 2006, DOJ in 2007
 
+Ans:
 Select (select(select StationCode from Stations where StationId = OriginStationId) from routes where routes.RouteId = bookings.RouteId) as Origin,(select(select StationCode from Stations where StationId = DestinationStationId) from routes where routes.RouteId = bookings.RouteId) as Destination, (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo) as TrainName, CoachCode, DateOfJourney, DateOfBooking, NoOfTickets from bookings where Year(DateOfBooking)=2006 and Year(DateOfJourney)=2007;
 
 10.
+Qn:
+Total number of coaches in the all the trains
 
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = TrainCoaches.TrainNo) as TrainName , count(*) as Total_No_Of_Coaches  from TrainCoaches group by TrainName;
 
 11.
+Qn:
+Total number of bookings in the database for the train no 16198
 
-
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo) as TrainName,count(*) as No_Of_Bookings from bookings where trainno=16198;
 
 12.
+Qn:
+Total no of tickets column 'total' , booked for train no. 14198
 
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo) as TrainName,sum(NoOfTickets) as Total_No_Of_Tickets from bookings where trainno=14198;
 
 13.
+Qn:
+Minimum distance route
 
+Ans:
 Select (select StationCode from Stations where StationId = OriginStationId) as Origin,(select StationCode from Stations where StationId = DestinationStationId) as Destination, DistanceInKms from routes where DistanceInKms = (select min(DistanceInKms) from routes);
 
 14.
+Qn:
+Total number of tickets booked for each train in the database
 
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo), sum(NoOfTickets) as Total_No_Of_Tickets from bookings group by TrainNo;
 
 15.
+Qn:
+cost for 50 kms for each coach.
 
+Ans:
 Select CoachCode, CostPerKm*50 as Cost_For_50Kms from Coaches;
 
 16.
+Qn:
+List the train name and departure time for the trains starting from Bangalore.
 
+Ans:
 select (select TrainName from Trains where Trains.TrainNo = trainroutemaps.TrainNo) as TrainName, DepartureTime from trainroutemaps where RouteId = (select RouteId from Routes where DestinationStationId = (select StationId from Stations where StationCode = "Bangalore"));
 
 17.
+Qn:
+List the trains for which the total no of tickets booked is greater than 500
 
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo ) as TrainName, sum(NoOfTickets) as Total_No_Of_Tickets from bookings group by TrainNo having Total_No_Of_Tickets>500;
 
 18.
+Qn:
+List the trains for which the total no of tickets booked is lesser than 50
 
+Ans:
 Select t1.TrainName, sum(ifnull(t2.NoOfTickets,0)) as Total_No_Of_Tickets from Trains t1 left join Bookings t2 on t1.TrainNo = t2.TrainNo group by t1.TrainNo having Total_No_Of_Tickets<500;
 
 19.
+Qn:
+List the bookings along with train name, origin station, destination station and coach code after the date of journey ’25th Feb 2015’
 
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo) as TrainName, (select(select StationCode from Stations where StationId = OriginStationId) from routes where routes.RouteId = bookings.RouteId) as Origin,(select(select StationCode from Stations where StationId = DestinationStationId) from routes where routes.RouteId = bookings.RouteId) as Destination, CoachCode, DateOfJourney, DateOfBooking from bookings where DateOfJourney > "2015-02-25";
 
 20.
+Qn:
+List the trains via the route Mysore - Chennai
 
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = TrainRouteMaps.TrainNo) as TrainName from TrainRouteMaps where RouteId in (select RouteId from routes where originStationId = (select StationId from Stations where StationCode = "Mysore") and DestinationStationId = (select StationId from Stations where StationCode = "Chennai"));
 
 21.
+Qn:
+List the trains for which are booked till now.
 
+Ans:
 Select (select TrainName from Trains where Trains.TrainNo = Bookings.TrainNo)as Trains_Booked_Till_Now from Bookings group by TrainNo;
 
-mysqldump --add-drop-table -u root `cat /etc/psa/.psa.shadow` railway_bookings > railway_bookings.sql

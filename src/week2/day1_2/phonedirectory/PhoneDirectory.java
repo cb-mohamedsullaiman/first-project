@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,24 @@ public class PhoneDirectory {
     private Set<Long> phoneNumbers = new HashSet<>();
     private Map<String, ArrayList<Person>> personMap = new TreeMap<>();             //Person against his name
     private Map<Long, Person> phoneNumberMap = new HashMap<>();                        // Person against his phone number
-
+    
+    public boolean addPerson(String name, String address,List<PhoneNumberDetails> phoneDetails){
+        Person person = new Person();
+        person.setName(name);
+        person.setAddress(address);
+        for(PhoneNumberDetails phoneNumberDetail: phoneDetails){
+            Long phoneNumber = phoneNumberDetail.getPhoneNumber();
+            if (!((checkLength(phoneNumber, 10)) && !(checkExistenceOfPhoneNumber(phoneNumber)))) {
+                System.out.println("*******Cannot add "+phoneNumber+" to "+name+"*******");
+                continue;
+            }
+            phoneNumberMap.put(phoneNumber, person);
+            person.addPhoneDetails(phoneNumberDetail);
+                                    
+        }
+        mapPersonAgainstName(person);
+        return true;            
+    }
     public boolean retrievePersonByName(String personName) {
         if (personMap.isEmpty()) {
             return false;
@@ -98,7 +116,7 @@ public class PhoneDirectory {
         if (phoneNumbers.add(phoneNumber)) {
             return false;
         }
-        System.out.println("Phone Number already exists");
+        System.out.println("*******Phone Number "+phoneNumber+" already exists********");
         return true;
     }
 
@@ -126,30 +144,22 @@ public class PhoneDirectory {
             scanner.nextLine();
             switch (choice) {
                 case 1:
-                    Person person = new Person();
                     String name;
                     do {
                         System.out.println("Enter the person name:");
                         name = scanner.nextLine();
                     } while (!(phoneDirectory.checkLength(name)));
-                    person.setName(name);
                     String address;
                     do {
                         System.out.println("Enter the address:");
                         address = scanner.nextLine();
                     } while (!(phoneDirectory.checkLength(address)));
-                    person.setAddress(address);
-                    PhoneNumberDetails numberDetail;
+                    List<PhoneNumberDetails> phoneNumberDetails = new ArrayList<>();
                     do {
-                        numberDetail = new PhoneNumberDetails();
+                        PhoneNumberDetails numberDetail = new PhoneNumberDetails();
                         System.out.println("Enter the phone number:");
-                        Long phoneNumber = scanner.nextLong();
-                        if (!((phoneDirectory.checkLength(phoneNumber, 10)) && !(phoneDirectory.checkExistenceOfPhoneNumber(phoneNumber)))) {
-                            System.out.println("Type yes to continue adding phone numbers...");
-                            continue;
-                        }
+                        Long phoneNumber = scanner.nextLong();                       
                         numberDetail.setPhoneNumber(phoneNumber);
-                        phoneDirectory.phoneNumberMap.put(phoneNumber, person);
                         System.out.println("Is it your\n\t1.mobile number\n\t2.home number\n\t3.work number");
                         Integer phoneChoice = scanner.nextInt();
                         scanner.nextLine();
@@ -166,14 +176,12 @@ public class PhoneDirectory {
                             default:
                                 System.out.println("\n*********Invalid choice***********");
                                 System.out.println("Type yes to continue adding phone numbers..");
-                                phoneDirectory.phoneNumbers.remove(phoneNumber);
-                                phoneDirectory.phoneNumberMap.remove(phoneNumber);
                                 continue;
                         }
-                        person.addPhoneDetails(numberDetail);
+                        phoneNumberDetails.add(numberDetail);
                         System.out.println("Do you want to add another number?\nType yes or no");
                     } while (scanner.next().equalsIgnoreCase("yes"));
-                    phoneDirectory.mapPersonAgainstName(person);
+                    phoneDirectory.addPerson(name, address, phoneNumberDetails);
                     break;
                 case 2:
                     System.out.println("Enter the person name");

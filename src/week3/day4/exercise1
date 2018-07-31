@@ -1,7 +1,10 @@
 Alter table:
 
 1.
+Qn:
+Add columns 'created_at' and 'updated_at' to the tables marks, students and medals.
 
+Ans:
 alter table marks add column created_at timestamp, add column updated_at timestamp;
 
 alter table students add column created_at timestamp, add column updated_at timestamp;
@@ -9,8 +12,10 @@ alter table students add column created_at timestamp, add column updated_at time
 alter table medals add column created_at timestamp, add column updated_at timestamp;
 
 2.
+Qn:
+Replace the null values in quarterly, half_yearly and annual columns with 0 and make those columns as not nullable.
 
-
+Ans:
 update marks set quarterly = case when quarterly is null then 0 else quarterly end, half_yearly = case when half_yearly is null then 0 else half_yearly end, annual = case when annual is null then 0 else annual end;
 
 alter table marks modify column quarterly int not null, modify column half_yearly int not null, modify column annual int not null;
@@ -19,7 +24,13 @@ alter table marks modify column quarterly int not null, modify column half_yearl
 Insert and update:
 
 3.
+Questions:
+While inserting the value of updated_at & created_at should be the current time
+While updating the value of updated_at alone should be the time of update
 
+Ans:
 Alter table marks modify column created_at timestamp default now() , modify column updated_at timestamp default now() on update now();
 
 Alter table students modify column created_at timestamp default now(), modify column updated_at timestamp default now on update now();
+
+Alter table medals modify column created_at timestamp default now(), modify column updated_at timestamp default now() on update now();

@@ -1,10 +1,22 @@
-First exercise:
+********This exercise uses the training sample database that was provided for the previous days.*********
 1.
+Qn:
+create a table students_summary with the below columns
+    -student_id
+    -student_name
+    -year
+    -percentage (got in annual exams)
+    -no_of_medals_received
 
+Ans:
 create table students_summary (student_id int primary key, student_name varchar(30) not null, year year(4), percentage float , no_of_medals_received int default 0);
 
 2.
+Qn:
+Derive the values from the tables(students, marks and medals) and insert into the above table
+    -Use insert with select statement
 
+Ans:
 select t1.id,t1.name, t2.year, avg(t2.annual), (select count(student_id) from medals where student_id =t2.student_id and year = t2.year) from students t1 left join marks t2 on t1.id = t2.student_id group by t2.student_id,t2.year order by t1.id;    
 
 insert into students_summary(
@@ -14,7 +26,10 @@ select t1.id,t1.name, ifnull(t2.year,0), avg(t2.annual), (select count(student_i
 Second exercise:
 
 1.
+Qn:
+Add a column average to the table marks. Write a trigger to calculate the average marks for the subject whenever any insert/update happens in the columns quarterly, half_yearly and annual in the table 'marks'.
 
+Ans:
 alter table marks add column average float not null;
 
 create trigger set_average_before_insert before insert  on marks 
@@ -26,7 +41,13 @@ for each row
 set new.average = (new.quarterly+new.half_yearly+new.annual)/3;
 
 2.
+Qn:
+Rename the column name from medal_won to medal_received in the table medals.
+    -Add a column medal_received to the table medals.
+    -Write a trigger to copy the values to both the columns(medal_won and medal_received) whenever any of these columns inserted/updated.
+    -Drop the column medal_won.
 
+Ans:
 alter table medals add medal_received varchar(10) after medal_won;
 
 update medals set medal_received=medal_won;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package week2.day3_4;
+package week2.day3_4.phonedirectory;
 
 import week2.day1_2.phonedirectory.PhoneNumberDetails;
 
@@ -11,13 +11,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -31,14 +29,13 @@ import week2.day1_2.phonedirectory.Person;
  *
  * @author cb-mohamedsullaiman
  */
-public class PhoneDirectoryUsingJSON {
+public class PhoneDirectoryUsingJSON implements PhoneDirectory {
 
-    private Set<Long> phoneNumbers = new HashSet<>();
-    private Map<String, ArrayList<Person>> personMap = new TreeMap<>();
-    private Map<Long, Person> phoneNumberMap = new HashMap<>();
-
+    protected Set<Long> phoneNumbers = new HashSet<>();
+    protected Map<String, ArrayList<Person>> personMap = new TreeMap<>();
+    protected Map<Long, Person> phoneNumberMap = new HashMap<>();
         
-    public void readPersonDetailsFromJSON(Path sourcePath) throws IOException {
+    public void read(Path sourcePath) throws IOException {
         
             BufferedReader bufferedReader = Files.newBufferedReader(sourcePath);
             JSONObject root = new JSONObject(new JSONTokener(bufferedReader));
@@ -98,9 +95,10 @@ public class PhoneDirectoryUsingJSON {
                 personMap.put(name, persons);
             }
         
-
+            System.out.println("\n*******Successfully read from json file******\n");
     }
-    
+
+@Override
     public Boolean retrievePersonByName(String personName) {
         if (personMap.isEmpty()) {
             return false;
@@ -116,6 +114,7 @@ public class PhoneDirectoryUsingJSON {
         return isPersonRetrieved;
     }
 
+    @Override
     public Boolean retrievePersonByPartialName(String partialName) {
         if (personMap.isEmpty()) {
             return false;
@@ -132,7 +131,8 @@ public class PhoneDirectoryUsingJSON {
         return isPersonRetrieved;
     }
 
-    public boolean retrievePersonByPhoneNumber(Long personPhoneNumber) {
+    @Override
+    public Boolean retrievePersonByPhoneNumber(Long personPhoneNumber) {
         if (personMap.isEmpty()) {
             return false;
         }
@@ -158,7 +158,7 @@ public class PhoneDirectoryUsingJSON {
     }
 
     public void printPersonDetails(Person person) {
-        System.out.println("\nName\t:" + person.getName());
+        System.out.println("Name\t:" + person.getName());
         System.out.println("Address\t:" + person.getAddress());
         Iterator iterator = person.getPhoneNumbers().iterator();
         while (iterator.hasNext()) {
@@ -169,52 +169,8 @@ public class PhoneDirectoryUsingJSON {
 
     }
     
-    public static void main(String args[]) throws IOException {
-        PhoneDirectoryUsingJSON phoneDirectory = new PhoneDirectoryUsingJSON();
-        Scanner scanner = new Scanner(System.in);
-        Integer choice;
-        Path sourcePath = Paths.get(System.getProperty("user.home")+"/sample/phone_directory.json");
-        phoneDirectory.readPersonDetailsFromJSON(sourcePath);
-        do {
-            System.out.println("1.Retrieve the person details based on name\n2.Retrieve the person details based on partial matching\n3.Retrieve the person details based on phone number\n4.Exit");
-            choice = scanner.nextInt();
-            scanner.nextLine();
-            switch (choice) {
-                case 1:
-                    System.out.println("Enter the person name");
-                    String nameOfThePersonToBeRetrieved = scanner.nextLine();
-                    if(nameOfThePersonToBeRetrieved.length()==0){
-                        System.out.println("Person Name cannot be empty.. Try again");
-                        continue;
-                    }
-                    if (!phoneDirectory.retrievePersonByName(nameOfThePersonToBeRetrieved)) {
-                        System.out.println("\n******No persons found with this name******");
-                    }
-                    break;
-                case 2:
-                    System.out.println("Enter the partial name of the person");
-                    String partialName = scanner.nextLine();
-                    if(partialName.length()==0){
-                        System.out.println("We cannot search without name.... Try again");
-                        continue;
-                    }
-                    if (!phoneDirectory.retrievePersonByPartialName(partialName)) {
-                        System.out.println("\n*****No persons found related to this name*****");
-                    }
-                    break;
-                case 3:
-                    System.out.println("Enter the phone no of the person");
-                    Long personPhoneNumber = scanner.nextLong();
-                    scanner.nextLine();
-                    if (!phoneDirectory.retrievePersonByPhoneNumber(personPhoneNumber)) {
-                        System.out.println("\n******No persons found with that phone number*****");
-                    }
-                    break;
-                case 4:
-                    break;
-
-            }
-        } while (choice != 4);
-    }
-
+    
+    
+    
+    
 }

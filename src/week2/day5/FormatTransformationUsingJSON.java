@@ -34,9 +34,10 @@ public class FormatTransformationUsingJSON {
             System.out.print("CSV file does not exists");
             throw new IOException();
         }
-        JSONObject root = new JSONObject();
+        
         BufferedReader bufferedReader = Files.newBufferedReader(sourcePath);
         CSVParser csvParser = CSVParser.parse(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
+        
         JSONArray customerDetails = new JSONArray();
         //For each record
         for (CSVRecord csvRecord : csvParser) {
@@ -45,17 +46,20 @@ public class FormatTransformationUsingJSON {
             String[] jsonHeader = {"Customer Id", "Subscription Id", "Invoice Id", "Status", "Paid On", "Next Retry", "Recurring", "First Invoice", "Invoice Date", "Start Date", "Refunded Amount", "Amount", "Tax Total", "First Name", "Last Name", "Email", "Company"};
             //For first 8 fields there is no alteration
             for (int i = 0; i < 8; i++) {
-                customerDetail.put(jsonHeader[i], csvRecord.get(csvHeader[i]));
+                customerDetail.put(jsonHeader[i], csvRecord.get(csvHeader[i]));             //for headers indexed from 0 to 7
             }
+            
             //We have to change the date format for next two fields
             SimpleDateFormat givenDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             SimpleDateFormat desiredDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            customerDetail.put(jsonHeader[8], desiredDateFormat.format(givenDateFormat.parse(csvRecord.get(csvHeader[8]))));
-            customerDetail.put(jsonHeader[9], desiredDateFormat.format(givenDateFormat.parse(csvRecord.get(csvHeader[9]))));
+            for(int i=8; i<10; i++){
+               customerDetail.put(jsonHeader[i], desiredDateFormat.format(givenDateFormat.parse(csvRecord.get(csvHeader[i]))));         // for headers indexed from 8 to 9      
+            }
             //We have to change the value for the next three fields
-            customerDetail.put(jsonHeader[10], Float.parseFloat(csvRecord.get(csvHeader[10])) / 10);
-            customerDetail.put(jsonHeader[11], Float.parseFloat(csvRecord.get(csvHeader[11])) / 100);
-            customerDetail.put(jsonHeader[12], Float.parseFloat(csvRecord.get(csvHeader[12])) / 100);
+            customerDetail.put(jsonHeader[10], Float.parseFloat(csvRecord.get(csvHeader[10])) / 10);        // for header indexed 10
+            for(int i=11; i<13; i++){
+                customerDetail.put(jsonHeader[i], Float.parseFloat(csvRecord.get(csvHeader[i])) / 100);           
+            }
             //This is for the creating a new json object with ustomer personal details
             JSONObject customerPersonalDetails = new JSONObject();
             for (int i = 13; i < 16; i++) {
@@ -66,10 +70,9 @@ public class FormatTransformationUsingJSON {
             //This will add the single customer detail to customer details array
             customerDetails.put(customerDetail);
         }
-        root.put("Customer Details", customerDetails);
         //This will create json file
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(jsonPath)) {
-            root.write(bufferedWriter);
+            customerDetails.write(bufferedWriter);
         }
 
     }
@@ -80,32 +83,34 @@ public class FormatTransformationUsingJSON {
             System.out.println("JSON file does not exists");
             throw new IOException();
         }
-        JSONObject root = new JSONObject(new JSONTokener(Files.newBufferedReader(jsonPath)));
-        JSONArray jsonCustomerDetails = root.getJSONArray("Customer Details");
+        JSONArray jsonCustomerDetails = new JSONArray(new JSONTokener(Files.newBufferedReader(jsonPath)));
         String headerArray[] = {"Customer Id", "Subscription Id", "Invoice Id", "Invoice Date", "Start Date", "Amount", "Status", "Paid On", "Next Retry", "Refunded Amount", "Recurring", "First Invoice", "Tax Total", "Customer Detail"};
         JSONArray header = new JSONArray(headerArray);
         //This is for adding the header to the first line of the csv file
-        String csvFile = "";
+        String csvFileContent = "";
         for (int i = 0; i < headerArray.length; i++) {
-            csvFile += headerArray[i];
+            csvFileContent += headerArray[i];
             if (i < headerArray.length - 1) {
-                csvFile += ",";
+                csvFileContent += ",";
             }
         }
-        csvFile += "\n";
+        csvFileContent += "\n";
         //This is for adding the entire csv file without header
-        csvFile = csvFile + CDL.toString(header, jsonCustomerDetails);
+        csvFileContent = csvFileContent + CDL.toString(header, jsonCustomerDetails);
         //This is for writing the entire csv file into the destination path
-        FileUtils.writeStringToFile(destinationPath.toFile(), csvFile, (String) null);
+        FileUtils.writeStringToFile(destinationPath.toFile(), csvFileContent, (String) null);
 
     }
 
     public static void main(String args[]) throws IOException, ParseException {
+        
         Path sourcePath = Paths.get(System.getProperty("user.home") + "/Downloads/Input.csv");
         Path jsonPath = Paths.get(System.getProperty("user.home") + "/sample/config.json");
+        
         createJSONFromCSV(sourcePath, jsonPath);
         
         Path destinationPath = Paths.get(System.getProperty("user.home") + "/sample/output.csv");
+        
         createCSVUsingJSON(jsonPath, destinationPath);
     }
 }

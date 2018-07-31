@@ -1,7 +1,21 @@
 1.
+Create a sample database with the name "service_station"
+
+Ans:
+
 create database if not exists service_station;
 
 2.
+Create models and write create table statements for the following entities and ensure these can be executed:
+
+Service Station - id, name, address, contact
+employees - id, name, age, contact
+customers - id, name, age, contact, emp_id  (employee can also be a customer)
+vehicles - id, type(Car, Bike, Bus), brand, color, service_charge
+invoices - id, name_of_owner, vehicle, amount_total, employee_assigned
+
+Ans:
+
 create table service_station(id int primary key auto_increment, name varchar(30) not null,address varchar(30) not null, contact bigint unsigned );
 
 create table employees ( id int primary key auto_increment, name varchar(30) not null, age tinyint unsigned, contact bigint unsigned );
@@ -14,6 +28,11 @@ create table invoices( id int primary key auto_increment, name_of_owner varchar(
 
 
 3.
+
+Drop tables and database
+
+Ans:
+
 drop table if exists service_station;  
 drop table if exists employees;
 drop table if exists customers;

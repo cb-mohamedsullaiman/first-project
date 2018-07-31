@@ -1,32 +1,57 @@
-Just inner join
- 
+
+
+*******Write the queries from the "marks" table using inner join with the table "students" table to replace student_id with name*******
 
 select t1.id, t2.name, t1.subject_id, t1.quarterly, t1.half_yearly, t1.annual, t1.year, t1.grade, from marks t1 inner join students t2 on t1.student_id = t2.id;
 
 
 For marks queries,
 1.
+Qn:
+Select the students who has not appeared in the annual exams.
+Format: All columns of the “marks” table.
 
+Ans:
 select t1.id, t2.name, t1.subject_id, t1.quarterly, t1.half_yearly, t1.annual, t1.year, t1.grade from marks t1 inner join students t2 on t1.student_id = t2.id where annual is null;
 
 2.
+Qn:
+Select the students who has not appeared in the annual exams during the year “2005”.
+Format: student_id, subject_id, year
 
+Ans:
 select t2.name, t1.subject_id, t1.year from marks t1 inner join students t2 on t1.student_id=t2.id where annual is null;
 
 3.
+Qn:
+Select the students who has appeared in one of the exams - quarterly, half_yearly or annual.
+Format: student_id, subject_id, year
 
+Ans:
 select t2.name, t1.subject_id, t1.year, from marks t1 inner join students t2 on t1.student_id = t2.id where not(t1.quarterly is null and t1.half_yearly is null and t1.annual is null);
 
 4.
+Qn:
+Select the students who has scored more than 90 in all the exams - quarterly, half_yearly and annual.
+Format: student_id, subject_id, year, quarterly, half_yearly, annual
 
+Ans:
 select t2.name, t1.subject_id, t1.year from marks t1 inner join students t2 on t1.student_id = t2.id where quarterly > 90 and half_yearly > 90 and annual > 90;
 
 5. 
+Qn:
+List the average marks(in quarterly, half_yearly & annual) for each subject scored for the year.
+Format: student_id, subject_id, average, year
 
+Ans:
 select t2.name, t1.subject_id, (ifnull(t1.quarterly,0)+ifnull(t1.half_yearly,0)+ifnull(t1.annual,0))/3 as average, t1.year from marks t1 inner join students t2 on t1.student_id = t2.id;
 
 6.
+Qn:
+List the average marks(in quarterly, half_yearly & annual) for each subject scored for the years 2003 & 2004
+Format: student_id, subject_id, average, year
 
+Ans:
 select t2.name, t1.subject_id, (ifnull(t1.quarterly,0)+ifnull(t1.half_yearly,0)+ifnull(t1.annual,0))/3 as average, t1.year from marks t1 inner join students t2 on t1.student_id = t2.id where year in(2003,2007);
 
 
