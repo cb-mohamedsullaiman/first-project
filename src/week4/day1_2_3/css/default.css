@@ -4,6 +4,7 @@ button:hover{
     cursor: pointer;
     opacity: 0.8;
 }
+
 div.head-line{
     padding: 50px;
     text-align: center;
@@ -19,10 +20,11 @@ div.head-line{
 td.header{
     font-size: 8pt;
     text-align: right;
-    color: #999999
+    color:  #999999;
 }  
 .container {
     padding: 16px;
     margin : 0 auto;
     width: fit-content;
 }
+

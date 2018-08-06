@@ -64,7 +64,7 @@ public class Register extends HttpServlet {
                 request.getRequestDispatcher("index.jsp").include(request, response);
             }
             else{
-               Integer rowsAffected = DAOImplementation.insert("into users values(?,?,?,?)", firstName, lastName, email, password);
+               Integer rowsAffected = DAOImplementation.insert("into users(firstName,lastName,email,password) values(?,?,?,?)", firstName, lastName, email, password);
                if(rowsAffected ==0){
                    request.setAttribute("registrationError","registration unsuccessful");
                    request.getRequestDispatcher("index.jsp").include(request, response);

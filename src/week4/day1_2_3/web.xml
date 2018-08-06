@@ -18,6 +18,11 @@
         <servlet-name>Register</servlet-name>
         <servlet-class>portal.Register</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SaveDetails</servlet-name>
+        <servlet-class>portal.SaveDetails</servlet-class>
+    </servlet>
+    
     <!-- Note: All <servlet> elements MUST be grouped together and
     placed IN FRONT of the <servlet-mapping> elements -->
     <servlet-mapping>
@@ -32,6 +37,11 @@
         <servlet-name>Register</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SaveDetails</servlet-name>
+        <url-pattern>/save</url-pattern>
+    </servlet-mapping>
+    
     <context-param>
     <param-name>dbUser</param-name>
     <param-value>root</param-value>

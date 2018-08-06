@@ -5,7 +5,7 @@
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-            
+
             @import "default.css";
             form {background-color: #f8f8f8 ;border: 3px solid #b2beb5; width: 30%; margin: 0 auto; border-radius: 10px; }
 
@@ -22,7 +22,6 @@
             }
 
             button {
-                color: white;
                 padding: 14px 20px;
                 margin: 8px 0;
                 border: none;
@@ -122,7 +121,7 @@
                 transform: translateY(-50%); /* or try 50% */
 
             }
-            
+
         </style>
         <script type ="text/javascript">
             function signup() {
@@ -301,6 +300,7 @@
 
                 </div>
             </form>
+                   
         </div>
 
         <div class ="signup" id = 'signup'>
